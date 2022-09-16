@@ -8,7 +8,7 @@ _Aprender a usar API Rest con Javascript_
 
 ## Recursos
 
-### Api Project: 
+### API Project: 
 [TheMovieDB API](https://developers.themoviedb.org/3/getting-started/introduction)
 
 ### Librerías utilizadas: 
