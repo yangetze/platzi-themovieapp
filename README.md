@@ -3,6 +3,9 @@
 ## Próposito
 _Aprender a usar API Rest con Javascript_
 
+## Aprendizajes 
+* Creación y uso de GitHubPages
+
 ## Recursos
 
 ### Api Project: 
