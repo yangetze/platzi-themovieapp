@@ -17,5 +17,5 @@ _Aprender a usar API Rest con Javascript_
 
 ### Curso de Platzi: 
 * [Curso de Consumo de API Rest con JavaScript](https://platzi.com/cursos/api-practico/)
-* [Trabajando por este certificado // Certificado de Aprobación del curso]()
+* 💻💻💻 Trabajando por este certificado 💪
 
