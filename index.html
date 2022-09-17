@@ -12,11 +12,15 @@
     <h1 class="text-2xl">
       Hello Movies! <sub class="text-xs italic"> (In construction...)</sub>
     </h1>
+
+    <!-- errorMessage -->
+    <span id="error"></span>
+
     <!-- search -->
     <div class="flex justify-center">
       <div class="mb-3 xl:w-96">
         <div
-          class="input-group relative flex flex-wrap items-stretch w-full mb-4"
+          class="input-group relative flex items-stretch w-full mb-4"
         >
           <input
             type="search"
@@ -36,51 +40,18 @@
       </div>
     </div>
 
-    <!-- categories -->
+    <!-- genres -->
     <div>
-      <h2 class="text-xl font-semibold">Categories</h2>
-      <div class="flex">
+      <h2 class="text-xl font-semibold">Genres</h2>
+      <div class="flex flex-row" id="genres">
         <div class="relative w-[200px] scale-90 hover:scale-100">
           <img
             src="https://www.kindacode.com/wp-content/uploads/2022/06/big-boss.jpeg"
             class="rounded-md"
           />
           <div class="absolute bottom-0 left-0 right-0 px-3 py-1">
-            <h3 class="text-xl text-white font-bold">category_name1</h3>
-            <p class="mt-0 text-sm text-gray-300">category_number1</p>
-          </div>
-        </div>
-
-        <div class="relative w-[200px] scale-90 hover:scale-100">
-          <img
-            src="https://www.kindacode.com/wp-content/uploads/2022/06/big-boss.jpeg"
-            class="rounded-md"
-          />
-          <div class="absolute bottom-0 left-0 right-0 px-3 py-1">
-            <h3 class="text-xl text-white font-bold">category_name1</h3>
-            <p class="mt-0 text-sm text-gray-300">category_number1</p>
-          </div>
-        </div>
-
-        <div class="relative w-[200px] scale-90 hover:scale-100">
-          <img
-            src="https://www.kindacode.com/wp-content/uploads/2022/06/big-boss.jpeg"
-            class="rounded-md"
-          />
-          <div class="absolute bottom-0 left-0 right-0 px-3 py-1">
-            <h3 class="text-xl text-white font-bold">category_name1</h3>
-            <p class="mt-0 text-sm text-gray-300">category_number1</p>
-          </div>
-        </div>
-
-        <div class="relative w-[200px] scale-90 hover:scale-100">
-          <img
-            src="https://www.kindacode.com/wp-content/uploads/2022/06/big-boss.jpeg"
-            class="rounded-md"
-          />
-          <div class="absolute bottom-0 left-0 right-0 px-3 py-1">
-            <h3 class="text-xl text-white font-bold">category_name1</h3>
-            <p class="mt-0 text-sm text-gray-300">category_number1</p>
+            <h3 class="text-xl text-white font-bold">prueba genres_name1</h3>
+            <p class="mt-0 text-sm text-gray-300">genres_number1</p>
           </div>
         </div>
       </div>
@@ -179,7 +150,9 @@
       </div>
     </div>
 
-    <aside class="w-100 h-full shadow-md bg-indigo-50 px-1 absolute right-0 hidden">
+    <aside
+      class="w-100 h-full shadow-md bg-indigo-50 px-1 absolute right-0 hidden"
+    >
       <div class="relative">
         <img
           src=""
