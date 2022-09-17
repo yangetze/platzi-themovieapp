@@ -6,32 +6,223 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Movie App</title>
     <link href="/dist/output.css" rel="stylesheet" />
-    <link rel="stylesheet" href="./style/app.css" />
   </head>
+
   <body>
-    <h1>Hello Movies!</h1>
-    <div>
-      <h2>Categories</h2>
-      <div class="flex">
-        <div class="flex-1">
-          <img src="" alt="categoria_type1" />
-          <span>categorie_name1</span>
-        </div>
-        <div class="flex-1">
-          <img src="" alt="categoria_type2" />
-          <span>categorie_name2</span>
-        </div>
-        <div class="flex-1">
-          <img src="" alt="categoria_type1" />
-          <span>categorie_name3</span>
+    <h1 class="text-2xl">
+      Hello Movies! <sub class="text-xs italic"> (In construction...)</sub>
+    </h1>
+    <!-- search -->
+    <div class="flex justify-center">
+      <div class="mb-3 xl:w-96">
+        <div
+          class="input-group relative flex flex-wrap items-stretch w-full mb-4"
+        >
+          <input
+            type="search"
+            class="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            placeholder="Search"
+            aria-label="Search"
+            aria-describedby="button-addon3"
+          />
+          <button
+            class="btn inline-block px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+            type="button"
+            id="button-addon3"
+          >
+            Search
+          </button>
         </div>
       </div>
     </div>
 
-    <footer>
-      Learning for develop better web experiences. Made by @yangetze
-    </footer>
+    <!-- categories -->
+    <div>
+      <h2 class="text-xl font-semibold">Categories</h2>
+      <div class="flex">
+        <div class="relative w-[200px] scale-90 hover:scale-100">
+          <img
+            src="https://www.kindacode.com/wp-content/uploads/2022/06/big-boss.jpeg"
+            class="rounded-md"
+          />
+          <div class="absolute bottom-0 left-0 right-0 px-3 py-1">
+            <h3 class="text-xl text-white font-bold">category_name1</h3>
+            <p class="mt-0 text-sm text-gray-300">category_number1</p>
+          </div>
+        </div>
+
+        <div class="relative w-[200px] scale-90 hover:scale-100">
+          <img
+            src="https://www.kindacode.com/wp-content/uploads/2022/06/big-boss.jpeg"
+            class="rounded-md"
+          />
+          <div class="absolute bottom-0 left-0 right-0 px-3 py-1">
+            <h3 class="text-xl text-white font-bold">category_name1</h3>
+            <p class="mt-0 text-sm text-gray-300">category_number1</p>
+          </div>
+        </div>
+
+        <div class="relative w-[200px] scale-90 hover:scale-100">
+          <img
+            src="https://www.kindacode.com/wp-content/uploads/2022/06/big-boss.jpeg"
+            class="rounded-md"
+          />
+          <div class="absolute bottom-0 left-0 right-0 px-3 py-1">
+            <h3 class="text-xl text-white font-bold">category_name1</h3>
+            <p class="mt-0 text-sm text-gray-300">category_number1</p>
+          </div>
+        </div>
+
+        <div class="relative w-[200px] scale-90 hover:scale-100">
+          <img
+            src="https://www.kindacode.com/wp-content/uploads/2022/06/big-boss.jpeg"
+            class="rounded-md"
+          />
+          <div class="absolute bottom-0 left-0 right-0 px-3 py-1">
+            <h3 class="text-xl text-white font-bold">category_name1</h3>
+            <p class="mt-0 text-sm text-gray-300">category_number1</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- top -->
+    <div>
+      <div class="flex justify-between">
+        <h2 class="text-xl font-semibold">Top Users</h2>
+        <div>
+          <button disabled="disabled">left</button>
+          <button disabled="disabled">right</button>
+        </div>
+      </div>
+      <div class="flex">
+        <div class="flex-2 rounded-md hover:bg-indigo-400 border bg-indigo-500">
+          <div class="flex">
+            <img src="" alt="movie_top2" class="poster" />
+            <div class="">
+              <span class="inline-block align-bottom"
+                >movie_name2
+                <br />
+                user_avg1</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="flex-2 rounded-md hover:bg-indigo-400 border bg-indigo-500">
+          <div class="flex">
+            <img src="" alt="movie_top2" class="poster" />
+            <div class="">
+              <span class="inline-block align-bottom"
+                >movie_name2
+                <br />
+                user_avg1</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="flex-2 rounded-md hover:bg-indigo-400 border bg-indigo-500">
+          <div class="flex">
+            <img src="" alt="movie_top2" class="poster" />
+            <div class="">
+              <span class="inline-block align-bottom"
+                >movie_name2
+                <br />
+                user_avg1</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="flex justify-between">
+        <h2 class="text-xl font-semibold">
+          Movies_Related_with_chosen_category
+        </h2>
+        <div>
+          <button disabled="disabled">left</button>
+          <button disabled="disabled">right</button>
+        </div>
+      </div>
+      <div class="flex">
+        <div
+          class="flex-2 m-1 rounded-md border bg-indigo-500 text-center scale-95 hover:scale-100"
+        >
+          <img
+            src=""
+            alt="movie_poster"
+            class="rounded-md poster mx-auto my-0"
+          />
+          <span class="text-sm">movie_name1</span>
+        </div>
+        <div
+          class="flex-2 m-1 rounded-md border bg-indigo-500 text-center scale-95 hover:scale-100"
+        >
+          <img
+            src=""
+            alt="movie_poster"
+            class="rounded-md poster mx-auto my-0"
+          />
+          <span class="text-sm">movie_name1</span>
+        </div>
+        <div
+          class="flex-2 m-1 rounded-md border bg-indigo-500 text-center scale-95 hover:scale-100"
+        >
+          <img
+            src=""
+            alt="movie_poster"
+            class="rounded-md poster mx-auto my-0"
+          />
+          <span class="text-sm">movie_name1</span>
+        </div>
+      </div>
+    </div>
+
+    <aside class="w-100 h-full shadow-md bg-indigo-50 px-1 absolute right-0 hidden">
+      <div class="relative">
+        <img
+          src=""
+          alt="movie_poster"
+          class="rounded-md poster block focus:outline-none focus-visible:ring-2 mx-auto my-0"
+        />
+        <h3 class="text-[22px] text-gray-900 font-extrabold leading-snug">
+          movie_name
+        </h3>
+        <div class="">
+          <h3 class="font-medium">about</h3>
+          <div class="mb-4">
+            <p>about_text</p>
+          </div>
+        </div>
+        <div class="mt-4">
+          <h3 class="font-medium">rating</h3>
+          <span>rating1 rating2 rating3</span>
+        </div>
+        <div class="mt-4">
+          <h3 class="font-medium">Trailer</h3>
+          <iframe src="" frameborder="0">youtube</iframe>
+        </div>
+      </div>
+    </aside>
+
     <script type="text/javascript" src="./src/config.js"></script>
     <script src="./src/main.js"></script>
   </body>
+
+  <footer class="text-center text-sm bg-slate-200">
+    <span> Learning for develop better web experiences.</span>
+    <br />
+    <span
+      >Made by
+      <a
+        href="https://github.com/yangetze"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hover:bg-indigo-200"
+        >@yangetze</a
+      >
+      💜</span
+    >
+  </footer>
 </html>
