@@ -1,10 +1,11 @@
 {
   "name": "platzi-themovieapp",
   "version": "1.0.0",
-  "description": "## Próposito _Aprender a usar API Rest con Javascript_",
+  "description": "## Purpose: _Learn to use API Rest con Javascript_",
   "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-css": "tailwindcss -i style/app.css -o ./dist/output.css"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,8 @@
   },
   "homepage": "https://github.com/yangetze/platzi-themovieapp#readme",
   "devDependencies": {
-    "tailwindcss": "^3.1.8"
+    "autoprefixer": "^10.4.11",
+    "postcss": "^8.4.16",
+    "tailwindcss": "^3.1.8" 
   }
 }
