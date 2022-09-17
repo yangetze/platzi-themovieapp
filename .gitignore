@@ -7,4 +7,5 @@ node_modules/
 # dotenv environment variables file
 .env
 
-config.js
+# config.js contains API KEY 
+src/config.js
