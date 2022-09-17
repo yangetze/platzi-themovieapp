@@ -1,0 +1,19 @@
+{
+  "name": "platzi-themovieapp",
+  "version": "1.0.0",
+  "description": "## Próposito _Aprender a usar API Rest con Javascript_",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yangetze/platzi-themovieapp.git"
+  },
+  "author": "@yangetze",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yangetze/platzi-themovieapp/issues"
+  },
+  "homepage": "https://github.com/yangetze/platzi-themovieapp#readme"
+}
