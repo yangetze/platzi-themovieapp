@@ -26,16 +26,17 @@ const instance = axios.create({
   },
 });
 
-async function get_genres_movies_list() {
+async function getGenres() {
   const res = await fetch(genre_movie_list + query_APIKey);
   const data = await res.json();
   const genres = data.genres;
 
   genres.forEach((genre) => {
-    if (genre.id == 27) return;
+    if (genre.id == 27 || genre.id == 53) return;
     const divGenres = document.getElementById("genres");
-    const div = document.createElement("div");
-    div.className = "relative scale-90 hover:scale-100";
+    const buttonForGenre = document.createElement("button");
+    buttonForGenre.className = "relative scale-90 hover:scale-100";
+    buttonForGenre.onclick = () => getPopularMoviesByGenre(genre.id);
 
     const img = document.createElement("img");
     img.className = "rounded-md";
@@ -43,8 +44,6 @@ async function get_genres_movies_list() {
       "src",
       "https://www.kindacode.com/wp-content/uploads/2022/06/big-boss.jpeg"
     );
-    // img.setAttribute("width", '200px');
-    // img.setAttribute("height", '200px');
 
     const h3 = document.createElement("h3");
     h3.className = "text-xl text-white font-bold";
@@ -59,54 +58,59 @@ async function get_genres_movies_list() {
     divAbsolute.appendChild(h3);
     divAbsolute.appendChild(p);
 
-    div.appendChild(img);
-    div.appendChild(divAbsolute);
-    divGenres.append(div);
+    buttonForGenre.appendChild(img);
+    buttonForGenre.appendChild(divAbsolute);
+    divGenres.append(buttonForGenre);
   });
-
-  // console.log("get_genres_movies_list");
-  // console.log(data);
 }
 
-async function getPopularMovies() {
+async function getPopularMoviesByGenre(genreId) {
   const res = await fetch(
     movie_popular_list + query_APIKey + "&language=en-US"
   );
   const data = await res.json();
   const movies = data.results;
-  // console.log(movies);
-  // var xy = movies.filter(function(element){
-  //   element.adult == false,
-  //   element.genre_ids != 27
-  // });
-  // console.log(xy)
-
+  console.log(movies);
+  const divPopularMoviesByGenre = document.getElementById(
+    "popularMoviesByGenre"
+  );
+  divPopularMoviesByGenre.innerHTML = "";
   movies.forEach((movie) => {
-    if (movie.adult && movie.genre_ids == 27) return;
-    const divPopularMoviesByGenre = document.getElementById(
-      "popularMoviesByGenre"
-    );
+    if (movie.adult && movie.genre_ids.includes(27)) return;
+    // || movie.genre_ids.includes(53)
+    movie.genre_ids.forEach((id) => {
+      if (id == genreId) {
+        const buttonForGenre = document.createElement("button");
+        buttonForGenre.className =
+          // "flex-2 m-1 rounded-md border bg-indigo-500 text-center scale-95 hover:scale-100";
+          "text-center scale-90 hover:scale-100";
 
-    const div = document.createElement("div");
-    div.className =
-      "flex-2 m-1 rounded-md border bg-indigo-500 text-center scale-95 hover:scale-100";
+        const imgMoviePoster = document.createElement("img");
+        imgMoviePoster.className = "rounded-md poster mx-auto my-0 ";
+        imgMoviePoster.setAttribute("src", getSrcForImage(movie.poster_path));
+        imgMoviePoster.setAttribute("alt", movie.original_title);
 
-    const img = document.createElement("img");
-    img.className = "rounded-md poster mx-auto my-0";
-    img.setAttribute("src", getSrcForImage(movie.backdrop_path));
+        const spanMovieTitle = document.createElement("span");
+        spanMovieTitle.className = "text-sm font-semibold";
+        spanMovieTitle.innerText = movie.original_title + " " + movie.genre_ids;
 
-    const span = document.createElement("span");
-    span.className = "text-sm";
-    span.innerText = movie.original_title;
+        const spanVoteAverage = document.createElement("span");
+        spanVoteAverage.className = "text-sm";
+        spanVoteAverage.innerText = movie.vote_average;
 
-    div.appendChild(img);
-    div.appendChild(span);
-    divPopularMoviesByGenre.append(div);
+        const br = document.createElement("br");
+
+        buttonForGenre.appendChild(imgMoviePoster);
+        buttonForGenre.appendChild(spanMovieTitle);
+        buttonForGenre.appendChild(br);
+        buttonForGenre.appendChild(spanVoteAverage);
+        divPopularMoviesByGenre.append(buttonForGenre);
+      }
+    });
   });
 }
 
-get_genres_movies_list();
-getPopularMovies();
+getGenres();
 
 async function errorMessage(response) {
   var vResult = true;
@@ -124,5 +128,7 @@ async function errorMessage(response) {
 }
 
 function getSrcForImage(path) {
-  return "https://image.tmdb.org/t/p/original" + path;
+  return "https://image.tmdb.org/t/p/w300" + path;
 }
+
+// 27 HORROR, 53 Thriller
