@@ -77,8 +77,6 @@ async function getPopularMovies() {
   );
   const data = await res.json();
   popularMovies = data.results;
-
-  console.log(popularMovies);
 }
 
 let fullMovie;
@@ -88,8 +86,6 @@ async function getMovieById(movieId) {
   );
   const data = await res.json();
   fullMovie = data;
-
-  console.log(fullMovie);
 }
 
 async function getPopularMoviesByGenre(genreId, genreName) {
