@@ -7,6 +7,7 @@ const SeparatorComma = ", ";
 // feature
 const genre = UrlBase + "/genre";
 const movie = UrlBase + "/movie";
+const trending = UrlBase + "/trending";
 
 //method
 const genre_movie_list = `${genre}/movie/list`;
@@ -15,6 +16,10 @@ const movie_popular_list = `${movie}/popular`;
 
 const example = "https://api.themoviedb.org/3/movie/550?api_key=" + key;
 const spanError = document.getElementById("error");
+
+let popularMovies;
+let fullMovie;
+let trendingMovies;
 
 const instance = axios.create({
   baseURL: UrlBase,
@@ -27,9 +32,11 @@ const instance = axios.create({
   },
 });
 
-function init() {
-  getGenres();
-  getPopularMovies();
+async function init() {
+  await getGenres();
+  await getPopularMovies();
+  await getTrendingMovies();
+  showTrendingMovies();
 }
 
 async function getGenres() {
@@ -70,7 +77,7 @@ async function getGenres() {
     divGenres.append(buttonForGenre);
   });
 }
-let popularMovies;
+
 async function getPopularMovies() {
   const res = await fetch(
     movie_popular_list + query_APIKey + "&language=en-US"
@@ -79,13 +86,18 @@ async function getPopularMovies() {
   popularMovies = data.results;
 }
 
-let fullMovie;
 async function getMovieById(movieId) {
   const res = await fetch(
     `${movie}/${movieId}${query_APIKey}${"&language=en-US"}`
   );
   const data = await res.json();
   fullMovie = data;
+}
+
+async function getTrendingMovies() {
+  const res = await fetch(`${trending}/${"movie/"}${"day"}${query_APIKey}`);
+  const data = await res.json();
+  trendingMovies = data.results;
 }
 
 async function getPopularMoviesByGenre(genreId, genreName) {
@@ -177,12 +189,53 @@ async function showSelectedMovie(movie) {
   const movieGenres = document.getElementById("selectedMovie_genres");
   let genres = "";
   let i = 0;
- 
+
   fullMovie.genres.forEach((genre) => {
     genres += (i >= 1 ? SeparatorComma : "") + genre.name;
     i++;
   });
   movieGenres.innerHTML = genres;
+}
+
+function showTrendingMovies() {
+  const trendingMoviesDiv = document.getElementById("trendingMoviesByGenre");
+  trendingMoviesDiv.innerHTML = "";
+
+  trendingMovies.forEach((movie) => {
+    if (movie.adult && movie.genre_ids.includes(27)) return;
+    const buttonForMovie = document.createElement("button");
+    buttonForMovie.className = "text-center scale-90 hover:scale-100";
+    buttonForMovie.onclick = () => showSelectedMovie(movie);
+
+    const imgMoviePoster = document.createElement("img");
+    imgMoviePoster.className = "rounded-md poster mx-auto my-0 ";
+    imgMoviePoster.setAttribute("src", getSrcForImage(movie.poster_path));
+    imgMoviePoster.setAttribute("alt", movie.original_title);
+
+    const spanMovieTitle = document.createElement("span");
+    spanMovieTitle.className = "text-sm font-semibold";
+    spanMovieTitle.innerText = movie.original_title;
+
+    const spanVoteAverage = document.createElement("span");
+    spanVoteAverage.className = "text-sm";
+
+    const vote = Number.parseInt(movie.vote_average);
+    let stars = "";
+    for (var x = 0; x < vote; x++) {
+      stars += "★";
+    }
+    for (var x = 0; x < 10 - vote; x++) {
+      stars += "☆";
+    }
+    spanVoteAverage.innerText = stars + " " + movie.vote_average;
+    const br = document.createElement("br");
+
+    buttonForMovie.appendChild(imgMoviePoster);
+    buttonForMovie.appendChild(spanMovieTitle);
+    buttonForMovie.appendChild(br);
+    buttonForMovie.appendChild(spanVoteAverage);
+    trendingMoviesDiv.append(buttonForMovie);
+  });
 }
 
 init();

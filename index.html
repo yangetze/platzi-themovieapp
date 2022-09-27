@@ -56,7 +56,7 @@
     </div>
 
     <!-- top -->
-    <div>
+    <section>
       <div class="flex justify-between">
         <h2 class="text-xl font-semibold">Top Users</h2>
         <div>
@@ -102,12 +102,13 @@
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <div>
+    <!-- popularMoviesByGenre -->
+    <section>
       <div class="flex justify-between">
         <h2 class="text-xl font-semibold" id="popularMoviesTitle">
-          Popular Movies by Genre (Choose one to see below)
+          Popular Movies by Genre (Choose one genre to see below)
         </h2>
         <div>
           <button disabled="disabled">left</button>
@@ -127,10 +128,24 @@
         </div>
         -->
       </div>
-    </div>
+    </section>
+
+    <!-- trending -->
+    <section>
+      <div class="flex justify-between">
+        <h2 class="text-xl font-semibold" id="trendingMovieTitle">
+          Trending movies today
+        </h2>
+        <div>
+          <button disabled="disabled">left</button>
+          <button disabled="disabled">right</button>
+        </div>
+      </div>
+      <div id="trendingMoviesByGenre" class="grid grid-cols-4 gap-4"></div>
+    </section>
 
     <aside
-      class="w-48 h-full shadow-md bg-indigo-50 px-1 absolute right-0"
+      class="w-[320px] h-screen shadow-md bg-indigo-50 px-1 absolute right-0 top-0 hidden"
       data-movieId
       id="movieSelected"
     >
@@ -159,7 +174,7 @@
           <span class="font-medium">Popularity: </span
           ><span id="selectedMovie_popularity"></span>
         </div>
-        <div class="mt-4">
+        <div class="mt-4 mb-4">
           <span class="font-medium">Genres: </span
           ><span id="selectedMovie_genres"></span>
         </div>
