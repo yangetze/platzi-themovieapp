@@ -2,6 +2,7 @@ const token = config.TOKEN_AUTH_V4;
 const key = config.API_KEY;
 const UrlBase = "https://api.themoviedb.org/3";
 const query_APIKey = "?api_key=" + key;
+const SeparatorComma = ", ";
 
 // feature
 const genre = UrlBase + "/genre";
@@ -26,6 +27,11 @@ const instance = axios.create({
   },
 });
 
+function init() {
+  getGenres();
+  getPopularMovies();
+}
+
 async function getGenres() {
   const res = await fetch(genre_movie_list + query_APIKey);
   const data = await res.json();
@@ -36,7 +42,8 @@ async function getGenres() {
     const divGenres = document.getElementById("genres");
     const buttonForGenre = document.createElement("button");
     buttonForGenre.className = "relative scale-90 hover:scale-100";
-    buttonForGenre.onclick = () => getPopularMoviesByGenre(genre.id);
+    buttonForGenre.onclick = () =>
+      getPopularMoviesByGenre(genre.id, genre.name);
 
     const img = document.createElement("img");
     img.className = "rounded-md";
@@ -49,41 +56,59 @@ async function getGenres() {
     h3.className = "text-xl text-white font-bold";
     h3.innerText = genre.name;
 
-    const p = document.createElement("p");
-    p.className = "mt-0 text-sm text-gray-300";
-    p.innerText = genre.id;
+    // const p = document.createElement("p");
+    // p.className = "mt-0 text-sm text-gray-300";
+    // p.innerText = genre.id;
 
     const divAbsolute = document.createElement("div");
     divAbsolute.className = "absolute bottom-0 left-0 right-0 px-3 py-1";
     divAbsolute.appendChild(h3);
-    divAbsolute.appendChild(p);
+    // divAbsolute.appendChild(p);
 
     buttonForGenre.appendChild(img);
     buttonForGenre.appendChild(divAbsolute);
     divGenres.append(buttonForGenre);
   });
 }
-
-async function getPopularMoviesByGenre(genreId) {
+let popularMovies;
+async function getPopularMovies() {
   const res = await fetch(
     movie_popular_list + query_APIKey + "&language=en-US"
   );
   const data = await res.json();
-  const movies = data.results;
-  console.log(movies);
+  popularMovies = data.results;
+
+  console.log(popularMovies);
+}
+
+let fullMovie;
+async function getMovieById(movieId) {
+  const res = await fetch(
+    `${movie}/${movieId}${query_APIKey}${"&language=en-US"}`
+  );
+  const data = await res.json();
+  fullMovie = data;
+
+  console.log(fullMovie);
+}
+
+async function getPopularMoviesByGenre(genreId, genreName) {
+  const title = document.getElementById("popularMoviesTitle");
+  title.innerHTML = "Popular Movies by " + genreName;
   const divPopularMoviesByGenre = document.getElementById(
     "popularMoviesByGenre"
   );
   divPopularMoviesByGenre.innerHTML = "";
-  var i  = 0;
-  movies.forEach((movie) => {
+  divPopularMoviesByGenre.className = "grid grid-cols-4 gap-4";
+  var i = 0;
+  popularMovies.forEach((movie) => {
     if (movie.adult && movie.genre_ids.includes(27)) return;
-    // || movie.genre_ids.includes(53)
     movie.genre_ids.forEach((id) => {
       if (id == genreId) {
         i++;
-        const buttonForGenre = document.createElement("button");
-        buttonForGenre.className = "text-center scale-90 hover:scale-100";
+        const buttonForMovie = document.createElement("button");
+        buttonForMovie.className = "text-center scale-90 hover:scale-100";
+        buttonForMovie.onclick = () => showSelectedMovie(movie);
 
         const imgMoviePoster = document.createElement("img");
         imgMoviePoster.className = "rounded-md poster mx-auto my-0 ";
@@ -96,29 +121,75 @@ async function getPopularMoviesByGenre(genreId) {
 
         const spanVoteAverage = document.createElement("span");
         spanVoteAverage.className = "text-sm";
-        spanVoteAverage.innerText = movie.vote_average;
 
+        const vote = Number.parseInt(movie.vote_average);
+        let stars = "";
+        for (var x = 0; x < vote; x++) {
+          stars += "★";
+        }
+        for (var x = 0; x < 10 - vote; x++) {
+          stars += "☆";
+        }
+        spanVoteAverage.innerText = stars + " " + movie.vote_average;
         const br = document.createElement("br");
 
-        buttonForGenre.appendChild(imgMoviePoster);
-        buttonForGenre.appendChild(spanMovieTitle);
-        buttonForGenre.appendChild(br);
-        buttonForGenre.appendChild(spanVoteAverage);
-        divPopularMoviesByGenre.append(buttonForGenre);
+        buttonForMovie.appendChild(imgMoviePoster);
+        buttonForMovie.appendChild(spanMovieTitle);
+        buttonForMovie.appendChild(br);
+        buttonForMovie.appendChild(spanVoteAverage);
+        divPopularMoviesByGenre.append(buttonForMovie);
       }
     });
-    
   });
 
-  if(i == 0){
-    const spanNoMovies = document.createElement('span');
-    spanNoMovies.className = 'italic center'
-    spanNoMovies.innerHTML = "There's no movies for this genre"
-    divPopularMoviesByGenre.append(spanNoMovies);
+  if (i == 0) {
+    const divNoMovies = document.createElement("div");
+    divNoMovies.className = "italic text-center text-xl";
+    divNoMovies.innerHTML = "There's no movies for this genre";
+    divPopularMoviesByGenre.append(divNoMovies);
+    divPopularMoviesByGenre.className = "";
   }
 }
 
-getGenres();
+async function showSelectedMovie(movie) {
+  const movieAsideWindows = document.getElementById("movieSelected");
+  if (movieAsideWindows.dataset.movieId == movie.id) {
+    movieAsideWindows.classList.add("hidden");
+    return;
+  }
+
+  await getMovieById(movie.id);
+
+  movieAsideWindows.dataset.movieId = movie.id;
+  movieAsideWindows.classList.remove("hidden");
+  const moviePoster = document.getElementById("selectedMovie_img");
+  moviePoster.setAttribute("src", getSrcForImage(movie.poster_path));
+  moviePoster.setAttribute("alt", fullMovie.title);
+
+  const movieTitle = document.getElementById("selectedMovie_title");
+  movieTitle.innerHTML = fullMovie.title;
+
+  const movieOverview = document.getElementById("selectedMovie_overview");
+  movieOverview.innerHTML = movie.overview;
+
+  const movieReleaseDate = document.getElementById("selectedMovie_releaseDate");
+  movieReleaseDate.innerHTML = movie.release_date;
+
+  const moviePopularity = document.getElementById("selectedMovie_popularity");
+  moviePopularity.innerHTML = movie.popularity;
+
+  const movieGenres = document.getElementById("selectedMovie_genres");
+  let genres = "";
+  let i = 0;
+ 
+  fullMovie.genres.forEach((genre) => {
+    genres += (i >= 1 ? SeparatorComma : "") + genre.name;
+    i++;
+  });
+  movieGenres.innerHTML = genres;
+}
+
+init();
 
 async function errorMessage(response) {
   var vResult = true;
