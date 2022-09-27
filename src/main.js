@@ -75,15 +75,15 @@ async function getPopularMoviesByGenre(genreId) {
     "popularMoviesByGenre"
   );
   divPopularMoviesByGenre.innerHTML = "";
+  var i  = 0;
   movies.forEach((movie) => {
     if (movie.adult && movie.genre_ids.includes(27)) return;
     // || movie.genre_ids.includes(53)
     movie.genre_ids.forEach((id) => {
       if (id == genreId) {
+        i++;
         const buttonForGenre = document.createElement("button");
-        buttonForGenre.className =
-          // "flex-2 m-1 rounded-md border bg-indigo-500 text-center scale-95 hover:scale-100";
-          "text-center scale-90 hover:scale-100";
+        buttonForGenre.className = "text-center scale-90 hover:scale-100";
 
         const imgMoviePoster = document.createElement("img");
         imgMoviePoster.className = "rounded-md poster mx-auto my-0 ";
@@ -92,7 +92,7 @@ async function getPopularMoviesByGenre(genreId) {
 
         const spanMovieTitle = document.createElement("span");
         spanMovieTitle.className = "text-sm font-semibold";
-        spanMovieTitle.innerText = movie.original_title + " " + movie.genre_ids;
+        spanMovieTitle.innerText = movie.original_title;
 
         const spanVoteAverage = document.createElement("span");
         spanVoteAverage.className = "text-sm";
@@ -107,7 +107,15 @@ async function getPopularMoviesByGenre(genreId) {
         divPopularMoviesByGenre.append(buttonForGenre);
       }
     });
+    
   });
+
+  if(i == 0){
+    const spanNoMovies = document.createElement('span');
+    spanNoMovies.className = 'italic center'
+    spanNoMovies.innerHTML = "There's no movies for this genre"
+    divPopularMoviesByGenre.append(spanNoMovies);
+  }
 }
 
 getGenres();
