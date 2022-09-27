@@ -63,14 +63,9 @@ async function getGenres() {
     h3.className = "text-xl text-white font-bold";
     h3.innerText = genre.name;
 
-    // const p = document.createElement("p");
-    // p.className = "mt-0 text-sm text-gray-300";
-    // p.innerText = genre.id;
-
     const divAbsolute = document.createElement("div");
     divAbsolute.className = "absolute bottom-0 left-0 right-0 px-3 py-1";
     divAbsolute.appendChild(h3);
-    // divAbsolute.appendChild(p);
 
     buttonForGenre.appendChild(img);
     buttonForGenre.appendChild(divAbsolute);
@@ -138,7 +133,8 @@ async function getPopularMoviesByGenre(genreId, genreName) {
         for (var x = 0; x < 10 - vote; x++) {
           stars += "☆";
         }
-        spanVoteAverage.innerText = stars + " " + movie.vote_average;
+        const voteFixed = movie.vote_average.toFixed(2)
+        spanVoteAverage.innerText = stars + " " +  voteFixed;
         const br = document.createElement("br");
 
         buttonForMovie.appendChild(imgMoviePoster);
@@ -176,6 +172,7 @@ async function showSelectedMovie(movie) {
 
   const movieTitle = document.getElementById("selectedMovie_title");
   movieTitle.innerHTML = fullMovie.title;
+  movieTitle.className = 'h-40'
 
   const movieOverview = document.getElementById("selectedMovie_overview");
   movieOverview.innerHTML = movie.overview;
@@ -213,7 +210,7 @@ function showTrendingMovies() {
     imgMoviePoster.setAttribute("alt", movie.original_title);
 
     const spanMovieTitle = document.createElement("span");
-    spanMovieTitle.className = "text-sm font-semibold";
+    spanMovieTitle.className = "text-sm font-semibold h-40";
     spanMovieTitle.innerText = movie.original_title;
 
     const spanVoteAverage = document.createElement("span");
@@ -256,7 +253,7 @@ async function errorMessage(response) {
 }
 
 function getSrcForImage(path) {
-  return "https://image.tmdb.org/t/p/w300" + path;
+  return "https://image.tmdb.org/t/p/w200" + path;
 }
 
 // 27 HORROR, 53 Thriller
