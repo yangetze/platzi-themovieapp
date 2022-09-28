@@ -41,8 +41,8 @@
     <!-- genres -->
     <div>
       <h2 class="text-xl font-semibold">Genres</h2>
-      <div class="grid grid-cols-4 gap-4" id="genres">
-         <!-- <div class="relative scale-90 hover:scale-100">
+      <div class="grid grid-cols-6 gap-4" id="genres">
+        <!-- <div class="relative scale-90 hover:scale-100">
           <img
             src="https://www.kindacode.com/wp-content/uploads/2022/06/big-boss.jpeg"
             class="rounded-md"
@@ -58,50 +58,13 @@
     <!-- top -->
     <section>
       <div class="flex justify-between">
-        <h2 class="text-xl font-semibold">Top Users</h2>
+        <h2 class="text-xl font-semibold">Top users</h2>
         <div>
-          <button disabled="disabled">left</button>
-          <button disabled="disabled">right</button>
+          <button type="button" disabled="disabled">left</button>
+          <button type="button" disabled="disabled">right</button>
         </div>
       </div>
-      <div class="flex">
-        <div class="flex-2 rounded-md hover:bg-indigo-400 border bg-indigo-500">
-          <div class="flex">
-            <img src="" alt="movie_top2" class="poster" />
-            <div class="">
-              <span class="inline-block align-bottom"
-                >movie_name2
-                <br />
-                user_avg1</span
-              >
-            </div>
-          </div>
-        </div>
-        <div class="flex-2 rounded-md hover:bg-indigo-400 border bg-indigo-500">
-          <div class="flex">
-            <img src="" alt="movie_top2" class="poster" />
-            <div class="">
-              <span class="inline-block align-bottom"
-                >movie_name2
-                <br />
-                user_avg1</span
-              >
-            </div>
-          </div>
-        </div>
-        <div class="flex-2 rounded-md hover:bg-indigo-400 border bg-indigo-500">
-          <div class="flex">
-            <img src="" alt="movie_top2" class="poster" />
-            <div class="">
-              <span class="inline-block align-bottom"
-                >movie_name2
-                <br />
-                user_avg1</span
-              >
-            </div>
-          </div>
-        </div>
-      </div>
+      <div id="topRatedUsers" class="grid grid-cols-4 gap-4"></div>
     </section>
 
     <!-- popularMoviesByGenre -->
@@ -111,8 +74,8 @@
           Popular Movies by Genre (Choose one genre to see below)
         </h2>
         <div>
-          <button disabled="disabled">left</button>
-          <button disabled="disabled">right</button>
+          <button type="button" disabled="disabled">left</button>
+          <button type="button" disabled="disabled">right</button>
         </div>
       </div>
       <div id="popularMoviesByGenre" class="grid grid-cols-4 gap-4"></div>
@@ -125,8 +88,8 @@
           Trending movies today
         </h2>
         <div>
-          <button disabled="disabled">left</button>
-          <button disabled="disabled">right</button>
+          <button type="button" disabled="disabled">left</button>
+          <button type="button" disabled="disabled">right</button>
         </div>
       </div>
       <div id="trendingMoviesByGenre" class="grid grid-cols-5 gap-5"></div>
@@ -165,6 +128,14 @@
         <div class="mt-4 mb-4">
           <span class="font-medium">Genres: </span
           ><span id="selectedMovie_genres"></span>
+        </div>
+        <div class="mt-4 mb-4" id="watchProviderFlatrate">
+          <span class="font-medium">Watch Provider: </span
+          ><span id="selectedMovie_WatchProvider"></span>
+        </div>
+        <div class="mt-4 mb-4" id="watchProviderRent">
+          <span class="font-medium">Rent Provider: </span
+          ><span id="selectedMovie_RentProvider"></span>
         </div>
         <div class="mt-4 hidden">
           <h3 class="font-medium">Trailer</h3>
