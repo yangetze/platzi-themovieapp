@@ -4,16 +4,25 @@ const UrlBase = "https://api.themoviedb.org/3";
 const query_APIKey = "?api_key=" + key;
 const SeparatorComma = ", ";
 
-// feature
-const genre = UrlBase + "/genre";
-const movie = UrlBase + "/movie";
-const trending = UrlBase + "/trending";
-
-//method
+// #region feature: Genre
+const genre = "/genre";
 const genre_movie_list = `${genre}/movie/list`;
+// #endregion
 
+// #region feature: Movie
+const movie = "/movie";
 const movie_popular_list = `${movie}/popular`;
 const movie_topRated_list = `${movie}/top_rated`;
+
+let watchProviderUS;
+let watchProviderVE;
+// #endregion
+
+// #region feature: Trending
+const trending = UrlBase + "/trending";
+const trendingTimeWindow = ["day", "week"];
+const trendingMediaTypes = ["all", "movie", "tv", "person"];
+// #endregion
 
 const example = "https://api.themoviedb.org/3/movie/550?api_key=" + key;
 const spanError = document.getElementById("error");
@@ -24,14 +33,18 @@ let trendingMovies;
 let watchProvider;
 let topRated;
 
-const instance = axios.create({
-  baseURL: UrlBase,
+const configHttp = {
   headers: {
-    "X-API-KEY": key,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Content-Type": "text/plain",
-    },
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "text/plain",
+  },
+};
+
+const api = axios.create({
+  baseURL: UrlBase,
+  https: configHttp,
+  params: {
+    api_key: key,
   },
 });
 
@@ -45,8 +58,7 @@ async function init() {
 }
 
 async function getGenres() {
-  const res = await fetch(genre_movie_list + query_APIKey);
-  const data = await res.json();
+  const { data, status } = await api.get(genre_movie_list);
   const genres = data.genres;
 
   genres.forEach((genre) => {
@@ -86,40 +98,41 @@ async function getGenres() {
 }
 
 async function getPopularMovies() {
-  const res = await fetch(
-    movie_popular_list + query_APIKey + "&language=en-US"
-  );
-  const data = await res.json();
+  const { data, status } = await api.get(movie_popular_list, {
+    language: "en-US",
+  });
   popularMovies = data.results;
 }
 
 async function getTopRatedMovies() {
-  const res = await fetch(
-    movie_topRated_list + query_APIKey + "&language=en-US"
-  );
-  const data = await res.json();
+  const { data, status } = await api.get(movie_topRated_list, {
+    language: "en-US",
+  });
   topRated = data.results;
 }
 
 async function getMovieById(movieId) {
-  const res = await fetch(
-    `${movie}/${movieId}${query_APIKey}${"&language=en-US"}`
-  );
-  const data = await res.json();
+  const { data, status } = await api.get(`${movie}/${movieId}`, {
+    language: "en-US",
+  });
   fullMovie = data;
 }
 
 async function getWatchProviderByMovieId(movieId) {
-  const res = await fetch(
-    `${movie}/${movieId}${"/watch/providers"}${query_APIKey}`
+  const { data, status } = await api.get(
+    `${movie}/${movieId}${"/watch/providers"}`
   );
-  const data = await res.json();
   watchProvider = data.results;
+  watchProviderUS = watchProvider.US;
+  watchProviderVE = watchProvider.VE;
 }
 
 async function getTrendingMovies() {
-  const res = await fetch(`${trending}/${"movie/"}${"day"}${query_APIKey}`);
-  const data = await res.json();
+  const trendingMediaTypeSelected = trendingMediaTypes[1];
+  const trendingTimeWindowSelected = trendingTimeWindow[0];
+  const { data, status } = await api.get(
+    `${trending}/${trendingMediaTypeSelected}/${trendingTimeWindowSelected}`
+  );
   trendingMovies = data.results;
 }
 
@@ -159,6 +172,7 @@ function showMessageWhenThereIsNotMovie(elementId) {
 
 async function showSelectedMovie(movie) {
   const movieAsideWindows = document.getElementById("movieSelected");
+  // TODO: Show movie when is close.
   if (movieAsideWindows.dataset.movieId == movie.id) {
     movieAsideWindows.classList.add("hidden");
     return;
@@ -197,42 +211,58 @@ async function showSelectedMovie(movie) {
   movieGenres.innerHTML = genres;
 
   await getWatchProviderByMovieId(movie.id);
-  const movieWatchProvider = document.getElementById(
-    "selectedMovie_WatchProvider"
+  
+  let watchProvider_FlatRate = document.getElementById(
+    "watchProvider_FlatRate"
   );
-  let movieProviderNames = "";
-  let movieProviderSrc = "";
-  let movieWatchProviderFlatRate = document.getElementById(
-    "watchProviderFlatRate"
+  const selectedMovie_FlatRateProvider = document.getElementById(
+    "selectedMovie_FlatRateProvider"
   );
-  let movieWatchProviderRent = document.getElementById("watchProviderRent");
-  const movieProviderLogo = document.createElement("img");
-  movieProviderLogo.setAttribute("style", "width:20%");
 
-  const movieRentLogo = document.createElement("img");
-  movieRentLogo.setAttribute("style", "width:20%");
+  let watchProvider_Rent = document.getElementById("watchProvider_Rent");
+  const selectedMovie_Rent = document.getElementById(
+    "selectedMovie_RentProvider"
+  );
 
-  if (watchProvider.US != null && watchProvider.US.flatrate != null) {
-    watchProvider.US.flatrate.forEach((flatratelement) => {
-      movieProviderSrc = getSrcForImage(flatratelement.logo_path, 200);
-      movieProviderLogo.setAttribute("src", movieProviderSrc);
-      movieProviderLogo.setAttribute("alt", flatratelement.provider_name);
+  selectedMovie_FlatRateProvider.innerHTML = "";
+  selectedMovie_FlatRateProvider.classList = "flex";
+  if (watchProviderUS != null && watchProviderUS.flatrate != null) {
+    watchProvider_FlatRate.classList.remove('hidden');
+    watchProviderUS.flatrate.forEach((flatRateElement) => {
+      selectedMovie_FlatRateProvider.appendChild(
+        createProviderImgHtml(flatRateElement)
+      );
     });
+  }else {
+    watchProvider_FlatRate.classList.add('hidden');
   }
 
-  // if (watchProvider.US != null && watchProvider.US.rent != null) {
-  //   watchProvider.US.rent.forEach((rent) => {
-  //     movieProviderSrc = getSrcForImage(rent.logo_path, 200);
-  //     movieRentLogo.setAttribute("src", movieProviderSrc);
-  //     movieRentLogo.setAttribute("alt", rent.provider_name);
-  //   });
-  // }
+  selectedMovie_Rent.innerHTML = "";
+  selectedMovie_Rent.classList = "flex";
+  if (watchProviderUS != null && watchProviderUS.rent != null) {
+    watchProvider_Rent.classList.remove('hidden');
+    watchProviderUS.rent.forEach((rent) => {
+      selectedMovie_Rent.appendChild(
+        createProviderImgHtml(rent)
+      );
+    });
+  } else {
+    watchProvider_Rent.classList.add('hidden');
+  }
 
-  movieWatchProvider.innerHTML = movieProviderNames;
-  movieWatchProvider.appendChild(movieProviderLogo);
-
-  // movieWatchProviderRent.appendChild(movieRentLogo)
 }
+
+function createProviderImgHtml(model) {
+  let name = model.provider_name;
+  let srcPath = getSrcForImage(model.logo_path, 200);
+  const img = document.createElement("img");
+  img.setAttribute("style", "width: 20%");
+  img.setAttribute("src", srcPath);
+  img.setAttribute("alt", name);
+  return img;
+}
+
+function createProviderHtml() {}
 
 function showTrendingMovies() {
   const NodeName = "trendingMoviesByGenre";
