@@ -33,18 +33,11 @@ let trendingMovies;
 let watchProvider;
 let topRated;
 
-const configHttp = {
-  headers: {
-    "Access-Control-Allow-Origin": "*",
-    "Content-Type": "text/plain",
-  },
-};
-
 const api = axios.create({
   baseURL: UrlBase,
-  https: configHttp,
+  https: httpHeaders,
   params: {
-    api_key: key,
+    api_key: config.API_KEY,
   },
 });
 
@@ -89,7 +82,7 @@ async function getGenres() {
     // divGenres.append(buttonForGenre);
 
     const buttonGenre = document.createElement("button");
-    buttonGenre.className = "rounded hover:rounded-lg bg-indigo-700";
+    // buttonGenre.classList.add("rounded hover:rounded-lg bg-indigo-700");
     // bg-gradient-to-r from-indigo-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500");
     buttonGenre.innerHTML = genre.name;
     buttonGenre.onclick = () => getPopularMoviesByGenre(genre.id, genre.name);
@@ -210,46 +203,64 @@ async function showSelectedMovie(movie) {
   });
   movieGenres.innerHTML = genres;
 
-  await getWatchProviderByMovieId(movie.id);
-  
-  let watchProvider_FlatRate = document.getElementById(
+  const watchProvider_FlatRate = document.getElementById(
     "watchProvider_FlatRate"
   );
-  const selectedMovie_FlatRateProvider = document.getElementById(
-    "selectedMovie_FlatRateProvider"
-  );
+  const watchProvider_Rent = document.getElementById("watchProvider_Rent");
 
-  let watchProvider_Rent = document.getElementById("watchProvider_Rent");
-  const selectedMovie_Rent = document.getElementById(
-    "selectedMovie_RentProvider"
-  );
+  await getWatchProviderByMovieId(movie.id);
 
-  selectedMovie_FlatRateProvider.innerHTML = "";
-  selectedMovie_FlatRateProvider.classList = "flex";
-  if (watchProviderUS != null && watchProviderUS.flatrate != null) {
-    watchProvider_FlatRate.classList.remove('hidden');
-    watchProviderUS.flatrate.forEach((flatRateElement) => {
-      selectedMovie_FlatRateProvider.appendChild(
-        createProviderImgHtml(flatRateElement)
-      );
-    });
-  }else {
-    watchProvider_FlatRate.classList.add('hidden');
+  if (!HaveProviders(watchProviderUS)) {
+    watchProvider_FlatRate.classList.add("hidden");
+    watchProvider_Rent.classList.add("hidden");
+    return;
   }
 
-  selectedMovie_Rent.innerHTML = "";
-  selectedMovie_Rent.classList = "flex";
-  if (watchProviderUS != null && watchProviderUS.rent != null) {
-    watchProvider_Rent.classList.remove('hidden');
-    watchProviderUS.rent.forEach((rent) => {
-      selectedMovie_Rent.appendChild(
-        createProviderImgHtml(rent)
-      );
-    });
+  if (!HaveProviders_FlatRate(watchProviderUS)) {
+    watchProvider_FlatRate.classList.add("hidden");
   } else {
-    watchProvider_Rent.classList.add('hidden');
+    createProviderList(
+      "watchProvider_FlatRate",
+      "selectedMovie_FlatRateProvider",
+      watchProviderUS.flatrate
+    );
   }
 
+  if (!HaveProviders_Rent(watchProviderUS)) {
+    watchProvider_Rent.classList.add("hidden");
+  } else {
+    createProviderList(
+      "watchProvider_Rent",
+      "selectedMovie_RentProvider",
+      watchProviderUS.rent
+    );
+  }
+}
+
+function createProviderList(parentNode, childrenNode, providerList) {
+  if (providerList != null) {
+    const providerParent = document.getElementById(parentNode);
+    providerParent.classList.remove("hidden");
+
+    const providerChild = document.getElementById(childrenNode);
+    providerChild.innerHTML = "";
+
+    providerList.forEach((prov) => {
+      providerChild.appendChild(createProviderImgHtml(prov));
+    });
+  }
+}
+
+function HaveProviders(Providers) {
+  return Providers != null;
+}
+
+function HaveProviders_FlatRate(Providers) {
+  return Providers != null;
+}
+
+function HaveProviders_Rent(Providers) {
+  return Providers != null;
 }
 
 function createProviderImgHtml(model) {
@@ -261,8 +272,6 @@ function createProviderImgHtml(model) {
   img.setAttribute("alt", name);
   return img;
 }
-
-function createProviderHtml() {}
 
 function showTrendingMovies() {
   const NodeName = "trendingMoviesByGenre";
