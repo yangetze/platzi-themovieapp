@@ -82,8 +82,8 @@ async function getGenres() {
     // divGenres.append(buttonForGenre);
 
     const buttonGenre = document.createElement("button");
-    // buttonGenre.classList.add("rounded hover:rounded-lg bg-indigo-700");
-    // bg-gradient-to-r from-indigo-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500");
+    buttonGenre.className =
+      "bg-gradient-to-r from-indigo-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 m-0.5";
     buttonGenre.innerHTML = genre.name;
     buttonGenre.onclick = () => getPopularMoviesByGenre(genre.id, genre.name);
     divGenres.append(buttonGenre);
@@ -163,12 +163,13 @@ function showMessageWhenThereIsNotMovie(elementId) {
   elementBase.append(divNoMovies);
 }
 
-async function showSelectedMovie(movie) {
+async function showMovieDetail(movie) {
   const movieAsideWindows = document.getElementById("movieSelected");
-  // TODO: Show movie when is close.
   if (movieAsideWindows.dataset.movieId == movie.id) {
-    movieAsideWindows.classList.add("hidden");
-    return;
+    if (!movieAsideWindows.classList.contains("hidden")) {
+      movieAsideWindows.classList.add("hidden");
+      return;
+    }
   }
 
   await getMovieById(movie.id);
@@ -182,7 +183,7 @@ async function showSelectedMovie(movie) {
   const movieTitle = document.getElementById("selectedMovie_title");
   movieTitle.innerHTML = fullMovie.title;
   movieTitle.className =
-    "text-[22px] text-gray-900 font-extrabold leading-snug text-center h-40";
+    "text-[22px] text-gray-900 font-extrabold leading-snug text-center";
 
   const movieOverview = document.getElementById("selectedMovie_overview");
   movieOverview.innerHTML = movie.overview;
@@ -267,7 +268,8 @@ function createProviderImgHtml(model) {
   let name = model.provider_name;
   let srcPath = getSrcForImage(model.logo_path, 200);
   const img = document.createElement("img");
-  img.setAttribute("style", "width: 20%");
+  img.className = "w-20";
+  img.className = "max-w-[5rem]";
   img.setAttribute("src", srcPath);
   img.setAttribute("alt", name);
   return img;
@@ -306,8 +308,8 @@ function createMovieHTML(MovieObject, elementId) {
 
 function createMovieButton(movie) {
   const buttonForMovie = document.createElement("button");
-  buttonForMovie.className = "text-center scale-90 hover:scale-100";
-  buttonForMovie.onclick = () => showSelectedMovie(movie);
+  buttonForMovie.className = "text-center scale-90 hover:scale-100 w-48";
+  buttonForMovie.onclick = () => showMovieDetail(movie);
   return buttonForMovie;
 }
 
@@ -334,23 +336,21 @@ function createMovieStarsRate(movieVoteAverage) {
 }
 
 function getStarsRate(voteAverage) {
-  const vote = Number.parseInt(voteAverage);
-  let stars = "";
-  for (var x = 0; x < vote; x++) {
-    stars += "★";
-  }
-  for (var x = 0; x < 10 - vote; x++) {
-    stars += "☆";
-  }
-  var vResult = stars + " " + voteAverage.toFixed(2);
+  // const vote = Number.parseInt(voteAverage);
+  // let stars = "";
+  // for (var x = 0; x < vote; x++) {
+  //   stars += "★";
+  // }
+  // for (var x = 0; x < 10 - vote; x++) {
+  //   stars += "☆";
+  // }
+  var vResult = "⭐ " + voteAverage.toFixed(1);
   return vResult;
 }
 
 function lineBreakHtml() {
   return document.createElement("br");
 }
-
-init();
 
 async function errorMessage(response) {
   var vResult = true;
@@ -373,3 +373,5 @@ function getSrcForImage(path, paramWidth) {
   }
   return `${"https://image.tmdb.org/t/p/w"}${paramWidth}${path}`;
 }
+
+init();

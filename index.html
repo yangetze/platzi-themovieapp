@@ -38,23 +38,6 @@
       </div>
     </div>
 
-    <!-- genres -->
-    <div>
-      <h2 class="text-xl font-semibold">Genres</h2>
-      <div class="grid grid-cols-6 gap-4" id="genres">
-        <!-- <div class="relative scale-90 hover:scale-100">
-          <img
-            src="https://www.kindacode.com/wp-content/uploads/2022/06/big-boss.jpeg"
-            class="rounded-md"
-          />
-          <div class="absolute bottom-0 left-0 right-0 px-3 py-1">
-            <h3 class="text-xl text-white font-bold">genres_name1</h3>
-            <p class="mt-0 text-sm text-gray-300">genres_number1</p>
-          </div>
-        </div> -->
-      </div>
-    </div>
-
     <!-- top -->
     <section>
       <div class="flex justify-between">
@@ -64,21 +47,7 @@
           <button type="button" disabled="disabled">right</button>
         </div>
       </div>
-      <div id="topRatedUsers" class="grid grid-cols-4 gap-4"></div>
-    </section>
-
-    <!-- popularMoviesByGenre -->
-    <section>
-      <div class="flex justify-between">
-        <h2 class="text-xl font-semibold" id="popularMoviesTitle">
-          Popular Movies by Genre (Choose one genre to see below)
-        </h2>
-        <div>
-          <button type="button" disabled="disabled">left</button>
-          <button type="button" disabled="disabled">right</button>
-        </div>
-      </div>
-      <div id="popularMoviesByGenre" class="grid grid-cols-4 gap-4"></div>
+      <div id="topRatedUsers" class="flex"></div>
     </section>
 
     <!-- trending -->
@@ -95,8 +64,40 @@
       <div id="trendingMoviesByGenre" class="grid grid-cols-5 gap-5"></div>
     </section>
 
+    <!-- genres -->
+    <section>
+      <h2 class="text-xl font-semibold">Genres</h2>
+      <div class="grid grid-cols-4 gap-2 md:grid-cols-2" id="genres">
+        <!-- <div class="relative scale-90 hover:scale-100">
+        <img
+          src="https://www.kindacode.com/wp-content/uploads/2022/06/big-boss.jpeg"
+          class="rounded-md"
+        />
+        <div class="absolute bottom-0 left-0 right-0 px-3 py-1">
+          <h3 class="text-xl text-white font-bold">genres_name1</h3>
+          <p class="mt-0 text-sm text-gray-300">genres_number1</p>
+        </div>
+      </div> -->
+      </div>
+    </section>
+
+    <!-- popularMoviesByGenre -->
+    <section>
+      <div class="flex justify-between">
+        <h2 class="text-xl font-semibold" id="popularMoviesTitle">
+          Popular Movies by Genre (Choose one genre to see below)
+        </h2>
+        <div>
+          <button type="button" disabled="disabled">left</button>
+          <button type="button" disabled="disabled">right</button>
+        </div>
+      </div>
+      <div id="popularMoviesByGenre" class="grid grid-cols-4 gap-4"></div>
+    </section>
+
+    <!-- aside window -->
     <aside
-      class="w-[320px] h-screen shadow-md bg-indigo-50 px-1 absolute right-0 top-0 hidden"
+      class="w-96"
       data-movieId
       id="movieSelected"
     >
@@ -112,35 +113,35 @@
           id="selectedMovie_title"
         ></h3>
         <div class="">
-          <h3 class="font-medium">About</h3>
+          <h3 class="font-semibold">About</h3>
           <div class="mb-4">
             <p id="selectedMovie_overview"></p>
           </div>
         </div>
         <div class="mt-4">
-          <span class="font-medium">Release date: </span
-          ><span id="selectedMovie_releaseDate"></span>
+          <span class="font-semibold mr-1">Release date:</span
+          ><span id="selectedMovie_releaseDate"> </span>
         </div>
         <div class="mt-4">
-          <span class="font-medium">Popularity: </span
+          <span class="font-semibold">Popularity:</span
           ><span id="selectedMovie_popularity"></span>
         </div>
         <div class="mt-4 mb-4">
-          <span class="font-medium">Genres: </span
+          <span class="font-semibold">Genres:</span
           ><span id="selectedMovie_genres"></span>
         </div>
         <div class="mt-4 mb-4" id="watchProvider_FlatRate">
-          <span class="font-medium">Watch Provider: </span
-          ><span id="selectedMovie_FlatRateProvider" class="flex"></span>
+          <span class="font-semibold">Watch Provider: </span
+          ><span id="selectedMovie_FlatRateProvider" class="grid grid-cols-4 gap-4"></span>
         </div>
         <div class="mt-4 mb-4" id="watchProvider_Rent">
-          <span class="font-medium">Rent Provider:</span>
-          <span id="selectedMovie_RentProvider" class="flex"></span>
+          <span class="font-semibold">Rent Provider:</span>
+          <span id="selectedMovie_RentProvider" class="grid grid-cols-4 gap-4"></span>
         </div>
-        <div class="mt-4 hidden">
+        <!-- <div class="mt-4 hidden">
           <h3 class="font-medium">Trailer</h3>
           <iframe src="" frameborder="0">youtube</iframe>
-        </div>
+        </div> -->
       </div>
     </aside>
 
