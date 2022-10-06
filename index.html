@@ -10,66 +10,67 @@
   </head>
 
   <body>
-    <h1 class="text-2xl">
-      Hello Movies! <sub class="text-xs italic"> (Under construction...)</sub>
-    </h1>
+    <div class="p-3">
+      <h1 class="text-2xl">
+        Hello Movies! <sub class="text-xs italic"> (Under construction...)</sub>
+      </h1>
 
-    <!-- errorMessage -->
-    <span id="error"></span>
+      <!-- errorMessage -->
+      <span id="error"></span>
 
-    <!-- search -->
-    <div class="flex justify-center">
-      <div class="mb-3 xl:w-96">
-        <div class="input-group relative flex items-stretch w-full mb-4">
-          <input
-            type="search"
-            class="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-            placeholder="Search"
-            aria-label="Search"
-            aria-describedby="button-addon3"
-          />
-          <button
-            class="btn inline-block px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
-            type="button"
-            id="button-addon3"
-          >
-            Search
-          </button>
+      <!-- search -->
+      <div class="flex justify-center">
+        <div class="mb-3 xl:w-96">
+          <div class="input-group relative flex items-stretch w-full mb-4">
+            <input
+              type="search"
+              class="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              placeholder="Search"
+              aria-label="Search"
+              aria-describedby="button-addon3"
+            />
+            <button
+              class="btn inline-block px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+              type="button"
+              id="button-addon3"
+            >
+              Search
+            </button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- top -->
-    <section>
-      <div class="flex">
-        <h2 class="text-xl font-semibold">Top users</h2>
-        <div>
-          <button type="button" disabled="disabled">left</button>
-          <button type="button" disabled="disabled">right</button>
+      <!-- top -->
+      <section>
+        <div class="flex">
+          <h2 class="text-xl font-semibold">Top users</h2>
+          <div>
+            <button type="button" disabled="disabled">left</button>
+            <button type="button" disabled="disabled">right</button>
+          </div>
         </div>
-      </div>
-      <div id="topRatedUsers" class="grid grid-cols-4 gap-3"></div>
-    </section>
+        <div id="topRatedUsers" class="grid grid-cols-4 gap-3"></div>
+      </section>
 
-    <!-- trending -->
-    <section>
-      <div class="flex justify-between">
-        <h2 class="text-xl font-semibold" id="trendingMovieTitle">
-          Trending movies today
-        </h2>
-        <div>
-          <button type="button" disabled="disabled">left</button>
-          <button type="button" disabled="disabled">right</button>
+      <!-- trending -->
+      <section>
+        <div class="flex justify-between">
+          <h2 class="text-xl font-semibold" id="trendingMovieTitle">
+            Trending movies today
+          </h2>
+          <div>
+            <button type="button" disabled="disabled">left</button>
+            <button type="button" disabled="disabled">right</button>
+          </div>
         </div>
-      </div>
-      <div id="trendingMoviesByGenre" class="flex"></div>
-    </section>
+        <div id="trendingMoviesByGenre" class="overflow-x-auto"></div>
+      </section>
 
-    <!-- genres -->
-    <section>
-      <h2 class="text-xl font-semibold">Genres</h2>
-      <div class="grid grid-cols-4 gap-2 md:grid-cols-2" id="genres">
-        <!-- <div class="relative scale-90 hover:scale-100">
+      <!-- genres -->
+      <section>
+        <h2 class="text-xl font-semibold">Genres</h2>
+        <div class="grid grid-cols-4 gap-2 md:grid-cols-2" id="genres">
+          <!-- <div class="relative scale-90 hover:scale-100">
         <img
           src="https://www.kindacode.com/wp-content/uploads/2022/06/big-boss.jpeg"
           class="rounded-md"
@@ -79,82 +80,90 @@
           <p class="mt-0 text-sm text-gray-300">genres_number1</p>
         </div>
       </div> -->
-      </div>
-    </section>
-
-    <!-- popularMoviesByGenre -->
-    <section>
-      <div class="flex justify-between">
-        <h2 class="text-xl font-semibold" id="popularMoviesTitle">
-          Popular Movies by Genre (Choose one genre to see below)
-        </h2>
-        <div>
-          <button type="button" disabled="disabled">left</button>
-          <button type="button" disabled="disabled">right</button>
         </div>
-      </div>
-      <div id="popularMoviesByGenre" class="grid grid-cols-4 gap-4"></div>
-    </section>
+      </section>
 
-    <!-- aside window -->
-    <aside class="w-96" data-movieId id="movieSelected">
-      <div class="relative">
-        <img
-          src=""
-          alt=""
-          class="rounded-md poster block focus:outline-none focus-visible:ring-2 mx-auto my-0"
-          id="selectedMovie_img"
-        />
-        <h3
-          class="text-[22px] text-gray-900 font-extrabold leading-snug text-center"
-          id="selectedMovie_title"
-        ></h3>
-        <div class="">
-          <h3 class="font-semibold">About</h3>
-          <div class="mb-4">
-            <p id="selectedMovie_overview"></p>
+      <!-- popularMoviesByGenre -->
+      <section>
+        <div class="flex justify-between">
+          <h2 class="text-xl font-semibold" id="popularMoviesTitle">
+            Popular Movies by Genre (Choose one genre to see below)
+          </h2>
+          <div>
+            <button type="button" disabled="disabled">left</button>
+            <button type="button" disabled="disabled">right</button>
           </div>
         </div>
-        <div class="mt-4">
-          <span class="font-semibold mr-1">Release date:</span
-          ><span id="selectedMovie_releaseDate"> </span>
-        </div>
-        <div class="mt-4">
-          <span class="font-semibold">Popularity:</span
-          ><span id="selectedMovie_popularity"></span>
-        </div>
-        <div class="mt-4 mb-4">
-          <span class="font-semibold">Genres:</span
-          ><span id="selectedMovie_genres"></span>
-        </div>
-        <div class="mt-4 mb-4" id="watchProvider_FlatRate">
-          <span class="font-semibold">Watch Provider: </span
-          ><span
-            id="selectedMovie_FlatRateProvider"
-            class="grid grid-cols-4 gap-4"
-          ></span>
-        </div>
-        <div class="mt-4 mb-4" id="watchProvider_Rent">
-          <span class="font-semibold">Rent Provider:</span>
-          <span
-            id="selectedMovie_RentProvider"
-            class="grid grid-cols-4 gap-4"
-          ></span>
-        </div>
-        <!-- <div class="mt-4 hidden">
+        <div id="popularMoviesByGenre" class="grid grid-cols-4 gap-4"></div>
+      </section>
+
+      <!-- aside window -->
+      <aside
+        class="absolute right-0 top-0 h-full w-96 bg-slate-300 p-4 hidden overflow-auto"
+        data-movieId
+        id="movieSelected"
+      >
+        <div class="relative">
+          <div class="text-end">
+            <button onclick="closeMovieDetails()">❎</button>
+          </div>
+          <img
+            src=""
+            alt=""
+            class="rounded-md poster block focus:outline-none focus-visible:ring-2 mx-auto my-0"
+            id="selectedMovie_img"
+          />
+          <h3
+            class="m-4 text-[22px] text-gray-900 font-extrabold leading-snug text-center"
+            id="selectedMovie_title"
+          ></h3>
+          <div class="">
+            <h3 class="font-semibold">About</h3>
+            <div class="mb-4">
+              <p id="selectedMovie_overview"></p>
+            </div>
+          </div>
+          <div class="mt-1">
+            <span class="font-semibold mr-1">Release date:</span
+            ><span id="selectedMovie_releaseDate"> </span>
+          </div>
+          <div class="mt-1">
+            <span class="font-semibold mr-1">Popularity:</span
+            ><span id="selectedMovie_popularity"></span>
+          </div>
+          <div class="mt-1">
+            <span class="font-semibold mr-1">Genres:</span
+            ><span id="selectedMovie_genres"></span>
+          </div>
+          <div class="mt-1" id="watchProvider_FlatRate">
+            <span class="font-semibold mr-1">Watch Provider:</span
+            ><span
+              id="selectedMovie_FlatRateProvider"
+              class="grid grid-cols-4 gap-4"
+            ></span>
+          </div>
+          <div class="mt-1" id="watchProvider_Rent">
+            <span class="font-semibold mr-1">Rent Provider:</span>
+            <span
+              id="selectedMovie_RentProvider"
+              class="grid grid-cols-4 gap-4"
+            ></span>
+          </div>
+          <!-- <div class="mt-4 hidden">
           <h3 class="font-medium">Trailer</h3>
           <iframe src="" frameborder="0">youtube</iframe>
         </div> -->
-      </div>
-    </aside>
+        </div>
+      </aside>
 
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script type="text/javascript" src="./src/config.js"></script>
-    <script src="./src/main.js"></script>
-    <script src="./src/navigation.js"></script>
+      <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+      <script type="text/javascript" src="./src/config.js"></script>
+      <script src="./src/main.js"></script>
+      <script src="./src/navigation.js"></script>
+    </div>
   </body>
 
-  <footer class="text-center text-sm bg-slate-200">
+  <footer class="text-center text-sm bg-slate-200 p-1.5">
     <span> Learning for develop better web experiences.</span>
     <br />
     <span

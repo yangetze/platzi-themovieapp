@@ -5,7 +5,7 @@ _Aprender a usar API Rest con Javascript_
 
 ## Aprendizajes 
 * Creación y uso de GitHubPages - [URL al Proyecto publicado](https://yangetze.github.io/platzi-themovieapp/)
-* Uso de Tailwind
+* Uso de Tailwind: Content configuration, generación de estilos necesarios
 - Uso de la librería Axios
 
 ## Recursos

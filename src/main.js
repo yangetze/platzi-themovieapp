@@ -175,7 +175,9 @@ async function showMovieDetail(movie) {
   await getMovieById(movie.id);
 
   movieAsideWindows.dataset.movieId = movie.id;
-  movieAsideWindows.classList.remove("hidden");
+  if (movieAsideWindows.classList.contains("hidden")) {
+    movieAsideWindows.classList.remove("hidden");
+  }
   const moviePoster = document.getElementById("selectedMovie_img");
   moviePoster.setAttribute("src", getSrcForImage(movie.poster_path));
   moviePoster.setAttribute("alt", fullMovie.title);
@@ -363,4 +365,9 @@ function getSrcForImage(path, paramWidth) {
     paramWidth = 200;
   }
   return `${"https://image.tmdb.org/t/p/w"}${paramWidth}${path}`;
+}
+
+function closeMovieDetails() {
+  const movieAsideWindows = document.getElementById("movieSelected");
+  movieAsideWindows.classList.add("hidden");
 }
