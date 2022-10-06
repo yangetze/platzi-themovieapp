@@ -41,14 +41,14 @@
 
     <!-- top -->
     <section>
-      <div class="flex justify-between">
+      <div class="flex">
         <h2 class="text-xl font-semibold">Top users</h2>
         <div>
           <button type="button" disabled="disabled">left</button>
           <button type="button" disabled="disabled">right</button>
         </div>
       </div>
-      <div id="topRatedUsers" class="flex"></div>
+      <div id="topRatedUsers" class="grid grid-cols-4 gap-3"></div>
     </section>
 
     <!-- trending -->
@@ -149,6 +149,7 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script type="text/javascript" src="./src/config.js"></script>
     <script src="./src/main.js"></script>
+    <script src="./src/navigation.js"></script>
   </body>
 
   <footer class="text-center text-sm bg-slate-200">
