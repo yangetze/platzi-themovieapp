@@ -336,16 +336,7 @@ function createMovieStarsRate(movieVoteAverage) {
 }
 
 function getStarsRate(voteAverage) {
-  // const vote = Number.parseInt(voteAverage);
-  // let stars = "";
-  // for (var x = 0; x < vote; x++) {
-  //   stars += "★";
-  // }
-  // for (var x = 0; x < 10 - vote; x++) {
-  //   stars += "☆";
-  // }
-  var vResult = "⭐ " + voteAverage.toFixed(1);
-  return vResult;
+  return "⭐ " + voteAverage.toFixed(1);
 }
 
 function lineBreakHtml() {
@@ -373,5 +364,3 @@ function getSrcForImage(path, paramWidth) {
   }
   return `${"https://image.tmdb.org/t/p/w"}${paramWidth}${path}`;
 }
-
-init();
