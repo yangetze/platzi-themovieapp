@@ -10,16 +10,30 @@
   </head>
 
   <body>
-    <div class="p-3">
-      <h1 class="text-2xl">
-        Hello Movies! <sub class="text-xs italic"> (Under construction...)</sub>
-      </h1>
+    <nav class="bg-gradient-to-r from-green-400 to-blue-500">
+      <ul class="flex">
+        <li class="p-1.5">
+          <a href="#Home" class="text-2xl"
+            >Hello Movies!
+            <sub class="text-xs italic"> (Under construction...)</sub></a
+          >
+        </li>
+        <li class="p-1.5 m-1 hover:font-semibold"><a href="#Home">Home</a></li>
+        <li class="p-1.5 m-1 hover:font-semibold">
+          <a href="#category">Category</a>
+        </li>
+        <li class="p-1.5 m-1 hover:font-semibold">
+          <a href="#topByUsers" class="hover:from-pink-500 hover:to-yellow-500"
+            >Top by Users</a
+          >
+        </li>
+      </ul>
+    </nav>
 
-      <!-- errorMessage -->
+    <div class="p-3">
       <span id="error"></span>
 
-      <!-- search -->
-      <div class="flex justify-center">
+      <section id="search" class="flex justify-center">
         <div class="mb-3 xl:w-96">
           <div class="input-group relative flex items-stretch w-full mb-4">
             <input
@@ -27,33 +41,33 @@
               class="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
               placeholder="Search"
               aria-label="Search"
-              aria-describedby="button-addon3"
+              aria-describedby="searchBtn"
+              id="searchInput"
             />
             <button
               class="btn inline-block px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
               type="button"
-              id="button-addon3"
+              id="searchBtn"
             >
               Search
             </button>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- top -->
-      <section>
-        <div class="flex">
+      <section id="topUsers">
+        <div class="flex justify-between">
           <h2 class="text-xl font-semibold">Top users</h2>
           <div>
             <button type="button" disabled="disabled">left</button>
             <button type="button" disabled="disabled">right</button>
           </div>
         </div>
-        <div id="topRatedUsers" class="grid grid-cols-4 gap-3"></div>
+        <div id="topRatedUsersList" class="grid grid-cols-4"></div>
       </section>
 
       <!-- trending -->
-      <section>
+      <section id="trending">
         <div class="flex justify-between">
           <h2 class="text-xl font-semibold" id="trendingMovieTitle">
             Trending movies today
@@ -63,13 +77,12 @@
             <button type="button" disabled="disabled">right</button>
           </div>
         </div>
-        <div id="trendingMoviesByGenre" class="overflow-x-auto"></div>
+        <div id="trendingMovieList" class="grid grid-cols-4"></div>
       </section>
 
-      <!-- genres -->
-      <section>
+      <section id="genres">
         <h2 class="text-xl font-semibold">Genres</h2>
-        <div class="grid grid-cols-4 gap-2 md:grid-cols-2" id="genres">
+        <div id="genresList" class="grid grid-cols-4 gap-4 md:grid-cols-2">
           <!-- <div class="relative scale-90 hover:scale-100">
         <img
           src="https://www.kindacode.com/wp-content/uploads/2022/06/big-boss.jpeg"
@@ -83,8 +96,7 @@
         </div>
       </section>
 
-      <!-- popularMoviesByGenre -->
-      <section>
+      <section id="popularMoviesByGenre">
         <div class="flex justify-between">
           <h2 class="text-xl font-semibold" id="popularMoviesTitle">
             Popular Movies by Genre (Choose one genre to see below)
@@ -94,7 +106,7 @@
             <button type="button" disabled="disabled">right</button>
           </div>
         </div>
-        <div id="popularMoviesByGenre" class="grid grid-cols-4 gap-4"></div>
+        <div id="popularMoviesByGenreList" class="grid grid-cols-4 gap-4"></div>
       </section>
 
       <!-- aside window -->
@@ -158,6 +170,7 @@
 
       <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
       <script type="text/javascript" src="./src/config.js"></script>
+      <script src="./src/nodes.js"></script>
       <script src="./src/main.js"></script>
       <script src="./src/navigation.js"></script>
     </div>

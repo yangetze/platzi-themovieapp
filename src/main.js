@@ -42,21 +42,27 @@ const api = axios.create({
 });
 
 async function init() {
-  await getGenres();
-  await getPopularMovies();
-  await getTrendingMovies();
-  await getTopRatedMovies();
-  showTrendingMovies();
-  showTopRatedMoviesByUsers();
+  // await getGenres();
+  // await getPopularMovies();
+  // await getTrendingMovies();
+  // await getTopRatedMovies();
+  // showTrendingMovies();
+  // showTopRatedMoviesByUsers();
 }
 
 async function getGenres() {
   const { data, status } = await api.get(genre_movie_list);
   const genres = data.genres;
+  console.log(genres.length);
+  for (var i = 0; i < genres.length; i++) {
+    
+    if (genres[i].name == "Horror" || genres[i].name == "Thriller" || genres[i].name == "Western" || genres[i].name == "War") {
+      genres.splice(i, 1);
+    }
+  }
+  console.log(genres)
 
   genres.forEach((genre) => {
-    if (genre.id == 27 || genre.id == 53) return;
-    const divGenres = document.getElementById("genres");
     // const buttonForGenre = document.createElement("button");
     // buttonForGenre.className = "relative scale-90 hover:scale-100";
     // buttonForGenre.onclick = () =>
@@ -85,8 +91,9 @@ async function getGenres() {
     buttonGenre.className =
       "bg-gradient-to-r from-indigo-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 m-0.5";
     buttonGenre.innerHTML = genre.name;
+    buttonGenre.dataset.genreName = genre.name;
     buttonGenre.onclick = () => getPopularMoviesByGenre(genre.id, genre.name);
-    divGenres.append(buttonGenre);
+    genreSection.append(buttonGenre);
   });
 }
 
@@ -128,39 +135,53 @@ async function getTrendingMovies() {
   );
   trendingMovies = data.results;
 }
-
+var previousGenre = "";
 async function getPopularMoviesByGenre(genreId, genreName) {
-  const NodeName = "popularMoviesByGenre";
+  if (previousGenre == genreName) {
+    const el3 = document.querySelector('[data-genre-name="' + genreName + '"]');
+    el3.classList.remove("from-pink-500");
+  }
+  if (typeof previousGenre !== "string" && previousGenre.length !== 0) {
+    const el2 = document.querySelector(
+      '[data-genre-name="' + previousGenre + '"]'
+    );
+    el2.classList.remove("from-pink-500");
+  }
+
+  const el1 = document.querySelector('[data-genre-name="' + genreName + '"]');
+  el1.classList.add("from-pink-500");
+
+  popularMoviesByGenreSection.classList.remove("hidden");
   const title = document.getElementById("popularMoviesTitle");
   title.innerHTML = "Popular Movies by " + genreName;
-  const divPopularMoviesByGenre = document.getElementById(NodeName);
-  divPopularMoviesByGenre.innerHTML = "";
-  divPopularMoviesByGenre.className = "grid grid-cols-4 gap-4";
+  popularMoviesByGenreList.innerHTML = "";
+  popularMoviesByGenreList.className = "grid grid-cols-4 gap-4";
   var i = 0;
   popularMovies.forEach((movie) => {
     if (movie.adult && movie.genre_ids.includes(27)) return;
     movie.genre_ids.forEach((id) => {
       if (id == genreId) {
         i++;
-        createMovieHTML(movie, NodeName);
+        createMovieHTML(movie, popularMoviesByGenreList);
       }
     });
   });
 
   if (i == 0) {
-    showMessageWhenThereIsNotMovie(NodeName);
+    showMessageWhenThereIsNotMovie(popularMoviesByGenreList);
   }
+
+  previousGenre = genreName;
 }
 
-function showMessageWhenThereIsNotMovie(elementId) {
+function showMessageWhenThereIsNotMovie(NodeElement) {
   const divNoMovies = document.createElement("div");
   divNoMovies.className = "italic text-center text-xl";
   divNoMovies.innerHTML = "There's no movies for this genre";
 
-  const elementBase = document.getElementById(elementId);
-  elementBase.innerHTML = "";
-  elementBase.className = "";
-  elementBase.append(divNoMovies);
+  NodeElement.innerHTML = "";
+  NodeElement.className = "";
+  NodeElement.append(divNoMovies);
 }
 
 async function showMovieDetail(movie) {
@@ -278,26 +299,24 @@ function createProviderImgHtml(model) {
 }
 
 function showTrendingMovies() {
-  const NodeName = "trendingMoviesByGenre";
-  const trendingMoviesDiv = document.getElementById(NodeName);
-  trendingMoviesDiv.innerHTML = "";
+  trendingMovieList.innerHTML = "";
 
   trendingMovies.forEach((movie) => {
     if (movie.adult && movie.genre_ids.includes(27)) return;
-    createMovieHTML(movie, NodeName);
+    createMovieHTML(movie, trendingMovieList);
   });
 }
 
 function showTopRatedMoviesByUsers() {
-  const NodeName = "topRatedUsers";
+  topRatedUsersList.innerHTML = "";
+
   topRated.forEach((movie) => {
     if (movie.adult && movie.genre_ids.includes(27)) return;
-    createMovieHTML(movie, NodeName);
+    createMovieHTML(movie, topRatedUsersList);
   });
 }
 
-function createMovieHTML(MovieObject, elementId) {
-  const elementBase = document.getElementById(elementId);
+function createMovieHTML(MovieObject, NodeElement) {
   const buttonForMovie = createMovieButton(MovieObject);
   buttonForMovie.appendChild(
     createPoster(MovieObject.original_title, MovieObject.poster_path)
@@ -305,19 +324,19 @@ function createMovieHTML(MovieObject, elementId) {
   buttonForMovie.appendChild(createMovieTitle(MovieObject.original_title));
   buttonForMovie.appendChild(lineBreakHtml());
   buttonForMovie.appendChild(createMovieStarsRate(MovieObject.vote_average));
-  elementBase.append(buttonForMovie);
+  NodeElement.append(buttonForMovie);
 }
 
 function createMovieButton(movie) {
   const buttonForMovie = document.createElement("button");
-  buttonForMovie.className = "text-center scale-90 hover:scale-100 w-48";
+  buttonForMovie.className = "scale-90 hover:scale-100 w-48 mx-auto";
   buttonForMovie.onclick = () => showMovieDetail(movie);
   return buttonForMovie;
 }
 
 function createPoster(movieTitle, moviePosterPath) {
   const imgMoviePoster = document.createElement("img");
-  imgMoviePoster.className = "rounded-md poster mx-auto my-0 ";
+  imgMoviePoster.className = "rounded-md poster";
   imgMoviePoster.setAttribute("src", getSrcForImage(moviePosterPath));
   imgMoviePoster.setAttribute("alt", movieTitle);
   return imgMoviePoster;
