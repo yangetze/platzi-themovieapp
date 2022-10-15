@@ -53,15 +53,16 @@ async function init() {
 async function getGenres() {
   const { data, status } = await api.get(genre_movie_list);
   const genres = data.genres;
-  console.log(genres.length);
   for (var i = 0; i < genres.length; i++) {
-    
-    if (genres[i].name == "Horror" || genres[i].name == "Thriller" || genres[i].name == "Western" || genres[i].name == "War") {
+    if (
+      genres[i].name == "Horror" ||
+      genres[i].name == "Thriller" ||
+      genres[i].name == "Western"
+    ) {
       genres.splice(i, 1);
     }
   }
-  console.log(genres)
-
+  genresList.innerHTML = "";
   genres.forEach((genre) => {
     // const buttonForGenre = document.createElement("button");
     // buttonForGenre.className = "relative scale-90 hover:scale-100";
@@ -93,7 +94,7 @@ async function getGenres() {
     buttonGenre.innerHTML = genre.name;
     buttonGenre.dataset.genreName = genre.name;
     buttonGenre.onclick = () => getPopularMoviesByGenre(genre.id, genre.name);
-    genreSection.append(buttonGenre);
+    genresList.append(buttonGenre);
   });
 }
 
@@ -134,29 +135,35 @@ async function getTrendingMovies() {
     `${trending}/${trendingMediaTypeSelected}/${trendingTimeWindowSelected}`
   );
   trendingMovies = data.results;
+
+  for (var i = 0; i < trendingMovies.length; i++) {
+    if (
+      trendingMovies[i].adult ||
+      trendingMovies[i].genre_ids.includes(27) ||
+      trendingMovies[i].genre_ids.includes(53)
+    ) {
+      trendingMovies.splice(i, 1);
+    }
+  }
 }
+
 var previousGenre = "";
 async function getPopularMoviesByGenre(genreId, genreName) {
-  if (previousGenre == genreName) {
-    const el3 = document.querySelector('[data-genre-name="' + genreName + '"]');
-    el3.classList.remove("from-pink-500");
-  }
-  if (typeof previousGenre !== "string" && previousGenre.length !== 0) {
-    const el2 = document.querySelector(
-      '[data-genre-name="' + previousGenre + '"]'
-    );
-    el2.classList.remove("from-pink-500");
-  }
-
-  const el1 = document.querySelector('[data-genre-name="' + genreName + '"]');
-  el1.classList.add("from-pink-500");
+  location.hash = `#category=${genreName}`;
 
   popularMoviesByGenreSection.classList.remove("hidden");
   const title = document.getElementById("popularMoviesTitle");
   title.innerHTML = "Popular Movies by " + genreName;
   popularMoviesByGenreList.innerHTML = "";
-  popularMoviesByGenreList.className = "grid grid-cols-4 gap-4";
   var i = 0;
+  await getPopularMovies();
+
+  for (var j = 0; j < popularMovies.length; j++) {
+    console.log(popularMovies[j]);
+    if (!popularMovies[j].genre_ids.includes(genreId)) {
+      popularMovies.splice(j, 1);
+    }
+  }
   popularMovies.forEach((movie) => {
     if (movie.adult && movie.genre_ids.includes(27)) return;
     movie.genre_ids.forEach((id) => {
@@ -166,6 +173,7 @@ async function getPopularMoviesByGenre(genreId, genreName) {
       }
     });
   });
+  popularMoviesHelpText.classList.add("hidden");
 
   if (i == 0) {
     showMessageWhenThereIsNotMovie(popularMoviesByGenreList);
@@ -175,6 +183,8 @@ async function getPopularMoviesByGenre(genreId, genreName) {
 }
 
 function showMessageWhenThereIsNotMovie(NodeElement) {
+  popularMoviesHelpText.classList.remove("hidden");
+
   const divNoMovies = document.createElement("div");
   divNoMovies.className = "italic text-center text-xl";
   divNoMovies.innerHTML = "There's no movies for this genre";
@@ -224,6 +234,16 @@ async function showMovieDetail(movie) {
   fullMovie.genres.forEach((genre) => {
     genres += (i >= 1 ? SeparatorComma : "") + genre.name;
     i++;
+
+    const buttonGenre = document.createElement("button");
+    buttonGenre.className =
+      "bg-gradient-to-r from-indigo-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 m-0.5";
+    buttonGenre.innerHTML = genre.name;
+    buttonGenre.dataset.genreName = genre.name;
+    console.log(buttonGenre);
+    // buttonGenre.onclick = () => getPopularMoviesByGenre(genre.id, genre.name);
+    movieGenres.append(buttonGenre);
+
   });
   movieGenres.innerHTML = genres;
 

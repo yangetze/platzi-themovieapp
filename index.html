@@ -63,10 +63,12 @@
             <button type="button" disabled="disabled">right</button>
           </div>
         </div>
-        <div id="topRatedUsersList" class="grid lg:grid-cols-5 sm:grid-cols-2 md:grid-cols-3 gap-1"></div>
+        <div
+          id="topRatedUsersList"
+          class="grid lg:grid-cols-5 sm:grid-cols-2 md:grid-cols-3 gap-1"
+        ></div>
       </section>
 
-      <!-- trending -->
       <section id="trending">
         <div class="flex justify-between">
           <h2 class="text-xl font-semibold" id="trendingMovieTitle">
@@ -77,12 +79,15 @@
             <button type="button" disabled="disabled">right</button>
           </div>
         </div>
-        <div id="trendingMovieList" class="grid lg:grid-cols-5 sm:grid-cols-2 md:grid-cols-3 gap-1"></div>
+        <div
+          id="trendingMovieList"
+          class="grid lg:grid-cols-5 sm:grid-cols-2 md:grid-cols-3 gap-1"
+        ></div>
       </section>
 
       <section id="genres">
         <h2 class="text-xl font-semibold">Genres</h2>
-        <div id="genresList" class="grid grid-cols-4 gap-4 md:grid-cols-2">
+        <div id="genresList" class="grid lg:grid-cols-6  md:grid-cols-4 sm:grid-cols-2 gap-4">
           <!-- <div class="relative scale-90 hover:scale-100">
         <img
           src="https://www.kindacode.com/wp-content/uploads/2022/06/big-boss.jpeg"
@@ -99,14 +104,18 @@
       <section id="popularMoviesByGenre">
         <div class="flex justify-between">
           <h2 class="text-xl font-semibold" id="popularMoviesTitle">
-            Popular Movies by Genre (Choose one genre to see below)
+            Popular Movies by Genre
           </h2>
           <div>
             <button type="button" disabled="disabled">left</button>
             <button type="button" disabled="disabled">right</button>
           </div>
         </div>
-        <div id="popularMoviesByGenreList" class="grid lg:grid-cols-5 sm:grid-cols-2 md:grid-cols-3 gap-1"></div>
+        <p id="helpText" class="italic">Choose one genre to see below</p>
+        <div
+          id="popularMoviesByGenreList"
+          class="grid lg:grid-cols-5 sm:grid-cols-2 md:grid-cols-3 gap-1"
+        ></div>
       </section>
 
       <!-- aside window -->

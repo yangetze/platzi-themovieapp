@@ -29,8 +29,6 @@ function navigator() {
     ? searchPage()
     : location.hash.startsWith("#movie=")
     ? moviePage()
-    : location.hash.startsWith("#category=")
-    ? categoryPage()
     : location.hash.startsWith("#topByUsers")
     ? topUsersPage()
     : homePage();
@@ -53,13 +51,11 @@ function trendsPage() {
 
 async function categoryPage() {
   await getGenres();
-  await getPopularMovies();
-
+  genresList.innerHtml = "";
   searchSection.classList.add("hidden");
   trendingSection.classList.add("hidden");
   topUsersSection.classList.add("hidden");
   genreSection.classList.remove("hidden");
-  popularMoviesByGenreSection.classList.add("hidden");
 }
 
 function searchPage() {
