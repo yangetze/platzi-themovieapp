@@ -1,8 +1,25 @@
+searchBtn.addEventListener("click", () => {
+  const txt = searchInput.value;
+  if (typeof previousGenre === "string" && previousGenre.length === 0) {
+    location.hash = "#search";
+  } else {
+    location.hash = "#search=" + txt;
+  }
+});
+
+searchInput.addEventListener("keypress", (e) => {
+  if (e.key == "Enter") {
+    const txt = searchInput.value;
+    location.hash = "#search=" + txt;
+    e.preventDefault();
+  }
+});
+
 window.addEventListener("DOMContentLoaded", navigator, false);
 window.addEventListener("hashchange", navigator, false);
 
 function navigator() {
-  console.log({ location },` ${location.hash}`);
+  console.log({ location }, ` ${location.hash}`);
 
   location.hash.startsWith("#trends")
     ? trendsPage()
@@ -25,7 +42,7 @@ async function homePage() {
   topUsersSection.classList.add("hidden");
   genreSection.classList.add("hidden");
   popularMoviesByGenreSection.classList.add("hidden");
-  
+
   await getTrendingMovies();
   showTrendingMovies();
 }
