@@ -32,6 +32,8 @@ function navigator() {
     : location.hash.startsWith("#topByUsers")
     ? topUsersPage()
     : homePage();
+
+  smoothscroll();
 }
 
 async function homePage() {
@@ -40,9 +42,7 @@ async function homePage() {
   topUsersSection.classList.add("hidden");
   genreSection.classList.add("hidden");
   popularMoviesByGenreSection.classList.add("hidden");
-
-  await getTrendingMovies();
-  showTrendingMovies();
+  await showTrendingMovies();
 }
 
 function trendsPage() {

@@ -41,15 +41,6 @@ const api = axios.create({
   },
 });
 
-async function init() {
-  // await getGenres();
-  // await getPopularMovies();
-  // await getTrendingMovies();
-  // await getTopRatedMovies();
-  // showTrendingMovies();
-  // showTopRatedMoviesByUsers();
-}
-
 async function getGenres() {
   const { data, status } = await api.get(genre_movie_list);
   const genres = data.genres;
@@ -63,7 +54,7 @@ async function getGenres() {
     }
   }
 
-  GetGenreList(genresList, genres, true);
+  GetGenres(genresList, genres, true);
 }
 
 async function getPopularMovies() {
@@ -179,8 +170,7 @@ async function showMovieDetail(movie) {
 
   body.classList.add("overflow-hidden");
   document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-
+  smoothscroll();
   selectedMovieImg.setAttribute("src", getSrcForImage(movie.poster_path));
   selectedMovieImg.setAttribute("alt", fullMovie.title);
 
@@ -190,7 +180,7 @@ async function showMovieDetail(movie) {
   selectedMoviePopularity.innerHTML = movie.popularity;
 
   selectedMovieGenres.innerHTML = "";
-  GetGenreList(selectedMovieGenres, fullMovie.genres, false);
+  GetGenres(selectedMovieGenres, fullMovie.genres, false);
 
   const watchProvider_FlatRate = document.getElementById(
     "watchProvider_FlatRate"
@@ -262,9 +252,10 @@ function createProviderImgHtml(model) {
   return img;
 }
 
-function showTrendingMovies() {
+async function showTrendingMovies() {
   trendingMovieList.innerHTML = "";
 
+  await getTrendingMovies();
   trendingMovies.forEach((movie) => {
     if (movie.adult && movie.genre_ids.includes(27)) return;
     createMovieHTML(movie, trendingMovieList);
@@ -356,9 +347,9 @@ function closeMovieDetails() {
   body.classList.remove("overflow-hidden");
 }
 
-function GetGenreList(NodeElement, GenreList, IsPrincipalPage) {
+function GetGenres(NodeElement, genres, IsPrincipalPage) {
   NodeElement.innerHTML = "";
-  GenreList.forEach((genre) => {
+  genres.forEach((genre) => {
     const buttonGenre = document.createElement("button");
     buttonGenre.className =
       "bg-gradient-to-r from-indigo-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 m-0.5 py-1 px-1.5 rounded";
@@ -369,4 +360,13 @@ function GetGenreList(NodeElement, GenreList, IsPrincipalPage) {
     }
     NodeElement.appendChild(buttonGenre);
   });
+}
+
+function smoothscroll() {
+  const currentScroll =
+    document.documentElement.scrollTop || document.body.scrollTop;
+  if (currentScroll > 0) {
+    window.requestAnimationFrame(smoothscroll);
+    window.scrollTo(0, currentScroll - currentScroll / 5);
+  }
 }
