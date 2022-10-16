@@ -62,40 +62,8 @@ async function getGenres() {
       genres.splice(i, 1);
     }
   }
-  genresList.innerHTML = "";
-  genres.forEach((genre) => {
-    // const buttonForGenre = document.createElement("button");
-    // buttonForGenre.className = "relative scale-90 hover:scale-100";
-    // buttonForGenre.onclick = () =>
-    //   getPopularMoviesByGenre(genre.id, genre.name);
 
-    // const img = document.createElement("img");
-    // img.className = "rounded-md";
-    // img.setAttribute(
-    //   "src",
-    //   "https://www.kindacode.com/wp-content/uploads/2022/06/big-boss.jpeg"
-    // );
-
-    // const h3 = document.createElement("h3");
-    // h3.className = "text-xl text-white font-bold";
-    // h3.innerText = genre.name;
-
-    // const divAbsolute = document.createElement("div");
-    // divAbsolute.className = "absolute bottom-0 left-0 right-0 px-3 py-1";
-    // divAbsolute.appendChild(h3);
-
-    // buttonForGenre.appendChild(img);
-    // buttonForGenre.appendChild(divAbsolute);
-    // divGenres.append(buttonForGenre);
-
-    const buttonGenre = document.createElement("button");
-    buttonGenre.className =
-      "bg-gradient-to-r from-indigo-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 m-0.5";
-    buttonGenre.innerHTML = genre.name;
-    buttonGenre.dataset.genreName = genre.name;
-    buttonGenre.onclick = () => getPopularMoviesByGenre(genre.id, genre.name);
-    genresList.append(buttonGenre);
-  });
+  GetGenreList(genresList, genres, true);
 }
 
 async function getPopularMovies() {
@@ -159,7 +127,6 @@ async function getPopularMoviesByGenre(genreId, genreName) {
   await getPopularMovies();
 
   for (var j = 0; j < popularMovies.length; j++) {
-    console.log(popularMovies[j]);
     if (!popularMovies[j].genre_ids.includes(genreId)) {
       popularMovies.splice(j, 1);
     }
@@ -223,14 +190,7 @@ async function showMovieDetail(movie) {
   selectedMoviePopularity.innerHTML = movie.popularity;
 
   selectedMovieGenres.innerHTML = "";
-  fullMovie.genres.forEach((genre) => {
-    const buttonGenre = document.createElement("button");
-    buttonGenre.className =
-      "bg-gradient-to-r from-indigo-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 m-0.5 py-1 px-1.5 rounded";
-    buttonGenre.innerHTML = genre.name;
-    buttonGenre.dataset.genreName = genre.name;
-    selectedMovieGenres.appendChild(buttonGenre);
-  });
+  GetGenreList(selectedMovieGenres, fullMovie.genres, false);
 
   const watchProvider_FlatRate = document.getElementById(
     "watchProvider_FlatRate"
@@ -394,4 +354,19 @@ function closeMovieDetails() {
   const movieAsideWindows = document.getElementById("movieSelected");
   movieAsideWindows.classList.add("hidden");
   body.classList.remove("overflow-hidden");
+}
+
+function GetGenreList(NodeElement, GenreList, IsPrincipalPage) {
+  NodeElement.innerHTML = "";
+  GenreList.forEach((genre) => {
+    const buttonGenre = document.createElement("button");
+    buttonGenre.className =
+      "bg-gradient-to-r from-indigo-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 m-0.5 py-1 px-1.5 rounded";
+    buttonGenre.innerHTML = genre.name;
+    buttonGenre.dataset.genreName = genre.name;
+    if (IsPrincipalPage) {
+      buttonGenre.onclick = () => getPopularMoviesByGenre(genre.id, genre.name);
+    }
+    NodeElement.appendChild(buttonGenre);
+  });
 }
