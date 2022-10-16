@@ -4,6 +4,7 @@ const body = $("body");
 
 const searchInput = $("#searchInput");
 const searchBtn = $("#searchBtn");
+const searchResults = $("#searchResults");
 
 const searchSection = $("#search");
 const topUsersSection = $("#topUsers");

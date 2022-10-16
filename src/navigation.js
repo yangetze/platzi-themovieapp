@@ -1,16 +1,18 @@
 searchBtn.addEventListener("click", () => {
-  const txt = searchInput.value;
+  const query = searchInput.value;
   if (typeof previousGenre === "string" && previousGenre.length === 0) {
     location.hash = "#search";
   } else {
-    location.hash = "#search=" + txt;
+    location.hash = "#search=" + query;
+    getMoviesBySearch(query);
   }
 });
 
 searchInput.addEventListener("keypress", (e) => {
   if (e.key == "Enter") {
-    const txt = searchInput.value;
-    location.hash = "#search=" + txt;
+    const query = searchInput.value;
+    location.hash = "#search=" + query;
+    getMoviesBySearch(query);
     e.preventDefault();
   }
 });
@@ -42,6 +44,7 @@ async function homePage() {
   topUsersSection.classList.add("hidden");
   genreSection.classList.add("hidden");
   popularMoviesByGenreSection.classList.add("hidden");
+  searchResults.classList.add("hidden");
   await showTrendingMovies();
 }
 
@@ -56,10 +59,17 @@ async function categoryPage() {
   trendingSection.classList.add("hidden");
   topUsersSection.classList.add("hidden");
   genreSection.classList.remove("hidden");
+  searchResults.classList.add("hidden");
 }
 
 function searchPage() {
   console.log("search");
+  searchSection.classList.remove("hidden");
+  searchResults.classList.remove("hidden");
+  trendingSection.classList.add("hidden");
+  topUsersSection.classList.add("hidden");
+  genreSection.classList.add("hidden");
+  popularMoviesByGenreSection.classList.add("hidden");
 }
 
 async function topUsersPage() {
@@ -67,6 +77,7 @@ async function topUsersPage() {
   showTopRatedMoviesByUsers();
 
   searchSection.classList.add("hidden");
+  searchResults.classList.add("hidden");
   trendingSection.classList.add("hidden");
   topUsersSection.classList.remove("hidden");
   genreSection.classList.add("hidden");
