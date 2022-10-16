@@ -121,7 +121,11 @@
       </section>
     </div>
     <!-- aside window -->
-    <aside class="absolute top-0 right-0 w-96 bg-slate-300" data-movieId id="movieSelected">
+    <aside
+      class="absolute top-0 right-0 w-96 bg-slate-300 h-screen rounded-tl-lg rounded-bl-lg shadow-inner overflow-y-auto hidden"
+      data-movieId
+      id="movieSelected"
+    >
       <div class="relative p-6">
         <div class="text-end">
           <button onclick="closeMovieDetails()">❎</button>
@@ -133,7 +137,7 @@
           id="selectedMovie_img"
         />
         <h3
-          class="m-4 text-[22px] text-gray-900 font-extrabold leading-snug text-center"
+          class="text-[22px] text-gray-900 font-extrabold leading-snug text-center"
           id="selectedMovie_title"
         ></h3>
         <div class="">
@@ -150,22 +154,21 @@
           <span class="font-semibold mr-1">Popularity:</span
           ><span id="selectedMovie_popularity"></span>
         </div>
-        <div class="mt-1">
-          <span class="font-semibold mr-1">Genres:</span
-          ><span id="selectedMovie_genres"></span>
+        <div class="mt-1 text-center">
+          <span id="selectedMovie_genres"></span>
         </div>
         <div class="mt-1" id="watchProvider_FlatRate">
           <span class="font-semibold mr-1">Watch Provider:</span
           ><span
             id="selectedMovie_FlatRateProvider"
-            class="grid lg:grid-cols-5 sm:grid-cols-2 md:grid-cols-3 gap-1 gap-4"
+            class="grid grid-cols-4 gap-2"
           ></span>
         </div>
         <div class="mt-1" id="watchProvider_Rent">
           <span class="font-semibold mr-1">Rent Provider:</span>
           <span
             id="selectedMovie_RentProvider"
-            class="grid lg:grid-cols-5 sm:grid-cols-2 md:grid-cols-3 gap-1 gap-4"
+            class="grid grid-cols-4 gap-2"
           ></span>
         </div>
       </div>

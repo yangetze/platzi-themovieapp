@@ -195,68 +195,52 @@ function showMessageWhenThereIsNotMovie(NodeElement) {
 }
 
 async function showMovieDetail(movie) {
-  const movieAsideWindows = document.getElementById("movieSelected");
-  if (movieAsideWindows.dataset.movieId == movie.id) {
-    if (!movieAsideWindows.classList.contains("hidden")) {
-      movieAsideWindows.classList.add("hidden");
+  if (movieSelected.dataset.movieId == movie.id) {
+    if (!movieSelected.classList.contains("hidden")) {
+      movieSelected.classList.add("hidden");
+      body.classList.remove("overflow-hidden");
       return;
     }
   }
 
   await getMovieById(movie.id);
 
-  movieAsideWindows.dataset.movieId = movie.id;
-  if (movieAsideWindows.classList.contains("hidden")) {
-    movieAsideWindows.classList.remove("hidden");
+  movieSelected.dataset.movieId = movie.id;
+  if (movieSelected.classList.contains("hidden")) {
+    movieSelected.classList.remove("hidden");
   }
-  const moviePoster = document.getElementById("selectedMovie_img");
-  moviePoster.setAttribute("src", getSrcForImage(movie.poster_path));
-  moviePoster.setAttribute("alt", fullMovie.title);
 
-  const movieTitle = document.getElementById("selectedMovie_title");
-  movieTitle.innerHTML = fullMovie.title;
-  movieTitle.className =
-    "text-[22px] text-gray-900 font-extrabold leading-snug text-center";
+  body.classList.add("overflow-hidden");
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
 
-  const movieOverview = document.getElementById("selectedMovie_overview");
-  movieOverview.innerHTML = movie.overview;
+  selectedMovieImg.setAttribute("src", getSrcForImage(movie.poster_path));
+  selectedMovieImg.setAttribute("alt", fullMovie.title);
 
-  const movieReleaseDate = document.getElementById("selectedMovie_releaseDate");
-  movieReleaseDate.innerHTML = movie.release_date;
+  selectedMovieTitle.innerHTML = fullMovie.title;
+  selectedMovieOverview.innerHTML = movie.overview;
+  selectedMovieReleaseDate.innerHTML = movie.release_date;
+  selectedMoviePopularity.innerHTML = movie.popularity;
 
-  const moviePopularity = document.getElementById("selectedMovie_popularity");
-  moviePopularity.innerHTML = movie.popularity;
-
-  const movieGenres = document.getElementById("selectedMovie_genres");
-  let genres = "";
-  let i = 0;
-
+  selectedMovieGenres.innerHTML = "";
   fullMovie.genres.forEach((genre) => {
-    genres += (i >= 1 ? SeparatorComma : "") + genre.name;
-    i++;
-
     const buttonGenre = document.createElement("button");
     buttonGenre.className =
-      "bg-gradient-to-r from-indigo-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 m-0.5";
+      "bg-gradient-to-r from-indigo-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 m-0.5 py-1 px-1.5 rounded";
     buttonGenre.innerHTML = genre.name;
     buttonGenre.dataset.genreName = genre.name;
-    console.log(buttonGenre);
-    // buttonGenre.onclick = () => getPopularMoviesByGenre(genre.id, genre.name);
-    movieGenres.append(buttonGenre);
-
+    selectedMovieGenres.appendChild(buttonGenre);
   });
-  movieGenres.innerHTML = genres;
 
   const watchProvider_FlatRate = document.getElementById(
     "watchProvider_FlatRate"
   );
-  const watchProvider_Rent = document.getElementById("watchProvider_Rent");
 
   await getWatchProviderByMovieId(movie.id);
 
   if (!HaveProviders(watchProviderUS)) {
     watchProvider_FlatRate.classList.add("hidden");
-    watchProvider_Rent.classList.add("hidden");
+    watchProviderRent.classList.add("hidden");
     return;
   }
 
@@ -270,8 +254,8 @@ async function showMovieDetail(movie) {
     );
   }
 
-  if (!HaveProviders_Rent(watchProviderUS)) {
-    watchProvider_Rent.classList.add("hidden");
+  if (!HaveProviders_Rent(watchProviderUS.rent)) {
+    watchProviderRent.classList.add("hidden");
   } else {
     createProviderList(
       "watchProvider_Rent",
@@ -409,4 +393,5 @@ function getSrcForImage(path, paramWidth) {
 function closeMovieDetails() {
   const movieAsideWindows = document.getElementById("movieSelected");
   movieAsideWindows.classList.add("hidden");
+  body.classList.remove("overflow-hidden");
 }

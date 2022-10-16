@@ -1,5 +1,7 @@
 const $ = (id) => document.querySelector(id);
 
+const body = $("body");
+
 const searchInput = $("#searchInput");
 const searchBtn = $("#searchBtn");
 
@@ -14,7 +16,21 @@ const trendingMovieList = $("#trendingMovieList");
 const popularMoviesByGenreList = $("#popularMoviesByGenreList");
 const popularMoviesHelpText =
   popularMoviesByGenreSection.querySelector("#helpText");
+
 const movieSelected = $("#movieSelected");
-const selectedMovie_genres = movieSelected.querySelector(
+const selectedMovieGenres = movieSelected.querySelector(
   "#selectedMovie_genres"
 );
+const selectedMovieReleaseDate = movieSelected.querySelector(
+  "#selectedMovie_releaseDate"
+);
+const selectedMovieTitle = movieSelected.querySelector("#selectedMovie_title");
+const selectedMovieImg = movieSelected.querySelector("#selectedMovie_img");
+const selectedMovieOverview = movieSelected.querySelector(
+  "#selectedMovie_overview"
+);
+const selectedMoviePopularity = movieSelected.querySelector(
+  "#selectedMovie_popularity"
+);
+
+const watchProviderRent = $("#watchProvider_Rent");
