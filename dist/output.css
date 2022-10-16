@@ -989,6 +989,32 @@ img.category {
   height: 80px;
 }
 
+body {
+  min-height: 100vh;
+  margin: 0;
+  position: relative;
+}
+
+/* Trick: */
+
+body {
+  position: relative;
+}
+
+body::after {
+  content: '';
+  display: block;
+  height: 50px;
+  /* Set same as footer's height */
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+}
+
 .hover\:scale-100:hover {
   --tw-scale-x: 1;
   --tw-scale-y: 1;
