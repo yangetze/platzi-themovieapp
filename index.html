@@ -11,7 +11,7 @@
 
   <body>
     <nav class="bg-gradient-to-r from-green-400 to-blue-500">
-      <ul class="flex">
+      <ul class="h-14 flex items-center">
         <li class="p-1.5">
           <a href="#Home" class="text-2xl"
             >Hello Movies!
@@ -28,11 +28,36 @@
           >
         </li>
       </ul>
+      <ul>
+        <li class="absolute top-0 right-0 p-1.5 m-1">
+          <section id="search" class="flex justify-center">
+            <div class="mb-3 xl:w-96">
+              <div class="input-group relative flex items-stretch w-full mb-4">
+                <input
+                  type="search"
+                  class="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                  placeholder="Search"
+                  aria-label="Search"
+                  aria-describedby="searchBtn"
+                  id="searchInput"
+                />
+                <button
+                  class="btn inline-block px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+                  type="button"
+                  id="searchBtn"
+                >
+                  Search
+                </button>
+              </div>
+            </div>
+          </section>
+        </li>
+      </ul>
     </nav>
     <span id="error"></span>
 
     <div class="p-3">
-      <section id="search" class="flex justify-center">
+      <!-- <section id="search" class="flex justify-center">
         <div class="mb-3 xl:w-96">
           <div class="input-group relative flex items-stretch w-full mb-4">
             <input
@@ -52,7 +77,7 @@
             </button>
           </div>
         </div>
-      </section>
+      </section> -->
 
       <section
         id="searchResults"
@@ -175,10 +200,7 @@
         </div>
         <div class="mt-1" id="relatedMovies">
           <span class="font-semibold mr-1">Related movies</span>
-          <span
-            id="relatedMoviesList"
-            class="grid grid-cols-3 gap-2"
-          ></span>
+          <span id="relatedMoviesList" class="grid grid-cols-3 gap-2"></span>
         </div>
       </div>
     </aside>

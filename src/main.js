@@ -45,6 +45,13 @@ const api = axios.create({
   },
 });
 
+var excludeGenres = [
+  { id: 27, name: "Horror" },
+  { id: 37, name: "Western" },
+  { id: 53, name: "Thriller" },
+];
+let GenresExcludeById = excludeGenres.map((value) => value.id);
+
 async function getLanguages() {
   const { data: language } = await api.get("/configuration/languages");
   console.log(language);
@@ -53,7 +60,7 @@ async function getLanguages() {
 async function getGenres() {
   const { data, status } = await api.get(genre_movie_list);
   getExcludedGenres(data.genres);
-  let genres = data.genres.filter((x) => !GenreExclude.includes(x));
+  let genres = data.genres.filter((x) => !GenresExcludeById.includes(x));
   CreateGenreList(genresList, genres);
 }
 
@@ -63,7 +70,7 @@ async function getPopularMovies() {
   });
   popularMovies = data.results.filter((x) => !x.adult);
 
-  let genreExcludeIds = GenreExclude.map((value) => value.id);
+  let genreExcludeIds = GenresExcludeById.map((value) => value.id);
   var xy;
   for (var i = 0; i < popularMovies.length; i++) {
     xy = popularMovies[i].genre_ids.filter((x) => !genreExcludeIds.includes(x));
@@ -71,7 +78,7 @@ async function getPopularMovies() {
 }
 
 async function getMoviesByGenre(genreId) {
-  const str = String(GenreExclude.map((value) => value.id));
+  const str = String(GenresExcludeById.map((value) => value.id));
   const { data, status } = await api.get("/discover/movie", {
     params: {
       with_genres: genreId,
@@ -120,46 +127,28 @@ async function getTrendingMovies() {
 
 var previousGenre = "";
 async function getMoviesBySearch(query) {
+  if (query === "") {
+    alert("Please add something...");
+    return;
+  }
   const { data, status, statusText } = await api
     .get(searchMovie, {
       params: {
         query: query,
         include_adult: false,
+        language: "en-US",
       },
     })
     .catch(function (error) {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-
-        var emoji = "😶";
-        const textError = `${emoji} An error has ocurred: ${error.response.status} ${error.response.data.errors}`;
-        console.error(textError);
-        spanError.innerText = textError;
-        spanError.style.display = "block";
-      } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        console.log(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log("Error", error.message);
-      }
-      console.log(error.config);
+      HandleError(error);
     });
 
   spanError.style.display = "none";
   searchMovieResults = data.results;
-  console.log("searchMovieResults");
-  console.log(searchMovieResults);
   if (searchMovieResults.length > 0) {
     CreateMovieList(searchResults, searchMovieResults);
   } else {
-    // no movies
+    searchResults.innerHTML = "No results";
   }
 
   // popularMovies = data.results;
@@ -193,7 +182,7 @@ async function getTrendingMovies() {
     `${trending}/${trendingMediaTypeSelected}/${trendingTimeWindowSelected}`
   );
   trendingMovies = data.results;
-  var ids = GenreExclude.map((value) => value.id);
+  var ids = GenresExcludeById.map((value) => value.id);
   trendingMovies.forEach((movie) => {
     var genreIds2 = movie.genre_ids;
     genreIds2.forEach((element) => {});
@@ -246,7 +235,7 @@ async function showMovieDetail(movie) {
 
   selectedMovieTitle.innerHTML = fullMovie.title;
   selectedMovieOverview.innerHTML = movie.overview;
-  selectedMovieReleaseDate.innerHTML = movie.release_date;
+  selectedMovieReleaseDate.innerHTML = dateDMY(movie.release_date);
   selectedMoviePopularity.innerHTML = movie.popularity;
 
   selectedMovieGenres.innerHTML = "";
@@ -324,12 +313,11 @@ function createProviderImgHtml(model) {
 
 async function showTrendingMovies() {
   trendingMovieList.innerHTML = "";
-
   await getTrendingMovies();
-  let genreExcludeIds = GenreExclude.map((value) => value.id);
   trendingMovies.forEach((movie) => {
-    if (movie.adult && movie.genre_ids.includes(27)) return;
-    createMovieHTML(movie, trendingMovieList);
+    if (isValidMovie(movie)) {
+      createMovieHTML(movie, trendingMovieList);
+    }
   });
 }
 
@@ -337,8 +325,9 @@ function showTopRatedMoviesByUsers() {
   topRatedUsersList.innerHTML = "";
 
   topRated.forEach((movie) => {
-    if (movie.adult && movie.genre_ids.includes(27)) return;
-    createMovieHTML(movie, topRatedUsersList);
+    if (isValidMovie(movie)) {
+      createMovieHTML(movie, topRatedUsersList);
+    }
   });
 }
 
@@ -409,6 +398,9 @@ async function errorMessage(response) {
 }
 
 function getSrcForImage(path, paramWidth) {
+  if (path === null) {
+    return "https://dummyimage.com/172.8x259.2/d3d3d3/000000.png&text=No+movie+poster";
+  }
   if (paramWidth == null) {
     paramWidth = 200;
   }
@@ -446,8 +438,9 @@ function smoothscroll() {
 function CreateMovieList(NodeElement, movies) {
   NodeElement.innerHTML = "";
   movies.forEach((movie) => {
-    if (movie.adult && movie.genre_ids.includes(27)) return;
-    createMovieHTML(movie, NodeElement);
+    if (isValidMovie(movie)) {
+      createMovieHTML(movie, NodeElement);
+    }
   });
 }
 
@@ -470,9 +463,8 @@ async function getPopularMoviesByGenre(genreId, genreName) {
   // previousGenre = genreName;
 }
 
-let GenreExclude = new Array();
-function getExcludedGenres(genreList) {
-  GenreExclude = new Array();
+async function getExcludedGenres(genreList) {
+  GenresExcludeById = new Array();
   for (var i = 0; i < genreList.length; i++) {
     if (
       genreList[i].name.includes("Horror") ||
@@ -481,13 +473,13 @@ function getExcludedGenres(genreList) {
       genreList[i].name.includes("War") ||
       genreList[i].name.includes("Mystery")
     ) {
-      GenreExclude.push(genreList[i]);
+      GenresExcludeById.push(genreList[i]);
     }
   }
 }
 
 function getExcludeGenresSeparatedByComma() {
-  return String(GenreExclude.map((value) => value.id));
+  return String(GenresExcludeById.map((value) => value.id));
 }
 
 async function getRelatedMoviesById(movieId) {
@@ -537,6 +529,19 @@ var rentProviderList = [
   "YouTube",
   "Amazon Video",
   "Apple iTunes",
+  "Amazon Prime Video",
+  "Paramount Plus",
 ];
 
-var watchProviderList = ["HBO Max"];
+var watchProviderList = ["HBO Max", "Disney Plus", "Netflix"];
+
+function dateDMY(date) {
+  const [year, month, day] = date.split("-");
+  const result = `${day}/${month}/${year}`;
+  return result;
+}
+
+function isValidMovie(movie) {
+  const found = movie.genre_ids.some((r) => GenresExcludeById.includes(r));
+  return !movie.adult && !found;
+}

@@ -39,7 +39,6 @@ function navigator() {
 }
 
 async function homePage() {
-  searchSection.classList.remove("hidden");
   trendingSection.classList.remove("hidden");
   topUsersSection.classList.add("hidden");
   genreSection.classList.add("hidden");
@@ -55,7 +54,6 @@ function trendsPage() {
 async function categoryPage() {
   await getGenres();
   genresList.innerHtml = "";
-  searchSection.classList.add("hidden");
   trendingSection.classList.add("hidden");
   topUsersSection.classList.add("hidden");
   genreSection.classList.remove("hidden");
@@ -63,8 +61,6 @@ async function categoryPage() {
 }
 
 function searchPage() {
-  console.log("search");
-  searchSection.classList.remove("hidden");
   searchResults.classList.remove("hidden");
   trendingSection.classList.add("hidden");
   topUsersSection.classList.add("hidden");
@@ -76,7 +72,6 @@ async function topUsersPage() {
   await getTopRatedMovies();
   showTopRatedMoviesByUsers();
 
-  searchSection.classList.add("hidden");
   searchResults.classList.add("hidden");
   trendingSection.classList.add("hidden");
   topUsersSection.classList.remove("hidden");
