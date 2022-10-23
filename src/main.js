@@ -45,26 +45,42 @@ const api = axios.create({
   },
 });
 
+async function getLanguages() {
+  const { data: language } = await api.get("/configuration/languages");
+  console.log(language);
+}
+
 async function getGenres() {
   const { data, status } = await api.get(genre_movie_list);
-  const genres = data.genres;
-  for (var i = 0; i < genres.length; i++) {
-    if (
-      genres[i].name == "Horror" ||
-      genres[i].name == "Thriller" ||
-      genres[i].name == "Western"
-    ) {
-      genres.splice(i, 1);
-    }
-  }
-
-  GetGenres(genresList, genres, true);
+  getExcludedGenres(data.genres);
+  let genres = data.genres.filter((x) => !GenreExclude.includes(x));
+  CreateGenreList(genresList, genres);
 }
 
 async function getPopularMovies() {
   const { data, status } = await api.get(movie_popular_list, {
     language: "en-US",
   });
+  popularMovies = data.results.filter((x) => !x.adult);
+
+  let genreExcludeIds = GenreExclude.map((value) => value.id);
+  var xy;
+  for (var i = 0; i < popularMovies.length; i++) {
+    xy = popularMovies[i].genre_ids.filter((x) => !genreExcludeIds.includes(x));
+  }
+}
+
+async function getMoviesByGenre(genreId) {
+  const str = String(GenreExclude.map((value) => value.id));
+  const { data, status } = await api.get("/discover/movie", {
+    params: {
+      with_genres: genreId,
+      without_genres: getExcludeGenresSeparatedByComma(),
+      include_video: true,
+      with_watch_monetization_types: "flatrate",
+    },
+  });
+  var res = data.results;
   popularMovies = data.results;
 }
 
@@ -80,6 +96,8 @@ async function getMovieById(movieId) {
     language: "en-US",
   });
   fullMovie = data;
+
+  await getRelatedMoviesById(movieId);
 }
 
 async function getWatchProviderByMovieId(movieId) {
@@ -98,30 +116,48 @@ async function getTrendingMovies() {
     `${trending}/${trendingMediaTypeSelected}/${trendingTimeWindowSelected}`
   );
   trendingMovies = data.results;
-
-  for (var i = 0; i < trendingMovies.length; i++) {
-    if (
-      trendingMovies[i].adult ||
-      trendingMovies[i].genre_ids.includes(27) ||
-      trendingMovies[i].genre_ids.includes(53)
-    ) {
-      trendingMovies.splice(i, 1);
-    }
-  }
 }
 
 var previousGenre = "";
 async function getMoviesBySearch(query) {
-  const { data, status } = await api.get(searchMovie, {
-    params: {
-      query: query,
-    },
-  });
-  searchMovieResults = data;
+  const { data, status, statusText } = await api
+    .get(searchMovie, {
+      params: {
+        query: query,
+        include_adult: false,
+      },
+    })
+    .catch(function (error) {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+
+        var emoji = "😶";
+        const textError = `${emoji} An error has ocurred: ${error.response.status} ${error.response.data.errors}`;
+        console.error(textError);
+        spanError.innerText = textError;
+        spanError.style.display = "block";
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    });
+
+  spanError.style.display = "none";
+  searchMovieResults = data.results;
+  console.log("searchMovieResults");
   console.log(searchMovieResults);
-  console.log(searchMovieResults.results.length > 0);
-  if (searchMovieResults.results.length > 0) {
-    CreateMovieList(searchResults, searchMovieResults.results);
+  if (searchMovieResults.length > 0) {
+    CreateMovieList(searchResults, searchMovieResults);
   } else {
     // no movies
   }
@@ -157,6 +193,11 @@ async function getTrendingMovies() {
     `${trending}/${trendingMediaTypeSelected}/${trendingTimeWindowSelected}`
   );
   trendingMovies = data.results;
+  var ids = GenreExclude.map((value) => value.id);
+  trendingMovies.forEach((movie) => {
+    var genreIds2 = movie.genre_ids;
+    genreIds2.forEach((element) => {});
+  });
 
   for (var i = 0; i < trendingMovies.length; i++) {
     if (
@@ -209,7 +250,7 @@ async function showMovieDetail(movie) {
   selectedMoviePopularity.innerHTML = movie.popularity;
 
   selectedMovieGenres.innerHTML = "";
-  GetGenres(selectedMovieGenres, fullMovie.genres, false);
+  CreateGenreList(selectedMovieGenres, fullMovie.genres);
 
   const watchProvider_FlatRate = document.getElementById(
     "watchProvider_FlatRate"
@@ -285,6 +326,7 @@ async function showTrendingMovies() {
   trendingMovieList.innerHTML = "";
 
   await getTrendingMovies();
+  let genreExcludeIds = GenreExclude.map((value) => value.id);
   trendingMovies.forEach((movie) => {
     if (movie.adult && movie.genre_ids.includes(27)) return;
     createMovieHTML(movie, trendingMovieList);
@@ -303,7 +345,10 @@ function showTopRatedMoviesByUsers() {
 function createMovieHTML(MovieObject, NodeElement) {
   const buttonForMovie = createMovieButton(MovieObject);
   buttonForMovie.appendChild(
-    createPoster(MovieObject.original_title, MovieObject.poster_path)
+    generatePosterImageSource(
+      MovieObject.original_title,
+      MovieObject.poster_path
+    )
   );
   buttonForMovie.appendChild(createMovieTitle(MovieObject.original_title));
   buttonForMovie.appendChild(lineBreakHtml());
@@ -318,7 +363,7 @@ function createMovieButton(movie) {
   return buttonForMovie;
 }
 
-function createPoster(movieTitle, moviePosterPath) {
+function generatePosterImageSource(movieTitle, moviePosterPath) {
   const imgMoviePoster = document.createElement("img");
   imgMoviePoster.className = "rounded-md poster";
   imgMoviePoster.setAttribute("src", getSrcForImage(moviePosterPath));
@@ -376,7 +421,7 @@ function closeMovieDetails() {
   body.classList.remove("overflow-hidden");
 }
 
-function GetGenres(NodeElement, genres, IsPrincipalPage) {
+function CreateGenreList(NodeElement, genres) {
   NodeElement.innerHTML = "";
   genres.forEach((genre) => {
     const buttonGenre = document.createElement("button");
@@ -384,9 +429,7 @@ function GetGenres(NodeElement, genres, IsPrincipalPage) {
       "bg-gradient-to-r from-indigo-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 m-0.5 py-1 px-1.5 rounded";
     buttonGenre.innerHTML = genre.name;
     buttonGenre.dataset.genreName = genre.name;
-    if (IsPrincipalPage) {
-      buttonGenre.onclick = () => getPopularMoviesByGenre(genre.id, genre.name);
-    }
+    buttonGenre.onclick = () => getPopularMoviesByGenre(genre.id, genre.name);
     NodeElement.appendChild(buttonGenre);
   });
 }
@@ -407,3 +450,93 @@ function CreateMovieList(NodeElement, movies) {
     createMovieHTML(movie, NodeElement);
   });
 }
+
+async function getPopularMoviesByGenre(genreId, genreName) {
+  popularMoviesByGenreSection.classList.remove("hidden");
+  const title = document.getElementById("popularMoviesTitle");
+  title.innerHTML = "Popular Movies by " + genreName;
+  popularMoviesByGenreList.innerHTML = "";
+  await getMoviesByGenre(genreId);
+
+  var i = 0;
+  popularMovies.forEach((movie) => {
+    createMovieHTML(movie, popularMoviesByGenreList);
+  });
+
+  // if (i == 0) {
+  //   showMessageWhenThereIsNotMovie(popularMoviesByGenreList);
+  // }
+
+  // previousGenre = genreName;
+}
+
+let GenreExclude = new Array();
+function getExcludedGenres(genreList) {
+  GenreExclude = new Array();
+  for (var i = 0; i < genreList.length; i++) {
+    if (
+      genreList[i].name.includes("Horror") ||
+      genreList[i].name.includes("Thriller") ||
+      genreList[i].name.includes("Western") ||
+      genreList[i].name.includes("War") ||
+      genreList[i].name.includes("Mystery")
+    ) {
+      GenreExclude.push(genreList[i]);
+    }
+  }
+}
+
+function getExcludeGenresSeparatedByComma() {
+  return String(GenreExclude.map((value) => value.id));
+}
+
+async function getRelatedMoviesById(movieId) {
+  const { data } = await api
+    .get(`/movie/${movieId}/similar`)
+    .catch(function (error) {
+      HandleError(error);
+    });
+
+  const topMoviesRelated = data.results.slice(0, 3);
+
+  relatedMoviesList.innerHTML = "";
+  topMoviesRelated.forEach((movie) => {
+    const buttonForMovie = createMovieButton(movie);
+    buttonForMovie.className = "";
+    var moviePoster = generatePosterImageSource(
+      movie.original_title,
+      movie.poster_path
+    );
+    buttonForMovie.appendChild(moviePoster);
+
+    relatedMoviesList.appendChild(buttonForMovie);
+  });
+}
+
+function HandleError(error) {
+  if (error.response) {
+    console.log(error.response.data);
+    console.log(error.response.status);
+    console.log(error.response.headers);
+
+    var emoji = "😶";
+    const textError = `${emoji} An error has ocurred: ${error.response.status} ${error.response.data.errors}`;
+    console.error(textError);
+    spanError.innerText = textError;
+    spanError.style.display = "block";
+  } else if (error.request) {
+    console.log(error.request);
+  } else {
+    console.log("Error", error.message);
+  }
+  console.log(error.config);
+}
+
+var rentProviderList = [
+  "Google Play Movies",
+  "YouTube",
+  "Amazon Video",
+  "Apple iTunes",
+];
+
+var watchProviderList = ["HBO Max"];

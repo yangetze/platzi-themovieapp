@@ -54,7 +54,10 @@
         </div>
       </section>
 
-      <section id="searchResults" class="grid lg:grid-cols-5 sm:grid-cols-2 md:grid-cols-3 gap-1"></section>
+      <section
+        id="searchResults"
+        class="grid lg:grid-cols-5 sm:grid-cols-2 md:grid-cols-3 gap-1"
+      ></section>
 
       <section id="topUsers">
         <div class="flex justify-between">
@@ -90,7 +93,7 @@
         <h2 class="text-xl font-semibold">Genres</h2>
         <div
           id="genresList"
-          class="grid lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 gap-4"
+          class="grid lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 gap-2"
         >
           <!-- <div class="relative scale-90 hover:scale-100">
         <img
@@ -142,11 +145,8 @@
           class="text-[22px] text-gray-900 font-extrabold leading-snug text-center"
           id="selectedMovie_title"
         ></h3>
-        <div class="">
-          <h3 class="font-semibold">About</h3>
-          <div class="mb-4">
-            <p id="selectedMovie_overview"></p>
-          </div>
+        <div class="mb-4">
+          <p id="selectedMovie_overview"></p>
         </div>
         <div class="mt-1">
           <span class="font-semibold mr-1">Release date:</span
@@ -171,6 +171,13 @@
           <span
             id="selectedMovie_RentProvider"
             class="grid grid-cols-4 gap-2"
+          ></span>
+        </div>
+        <div class="mt-1" id="relatedMovies">
+          <span class="font-semibold mr-1">Related movies</span>
+          <span
+            id="relatedMoviesList"
+            class="grid grid-cols-3 gap-2"
           ></span>
         </div>
       </div>

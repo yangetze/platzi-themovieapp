@@ -35,3 +35,7 @@ const selectedMoviePopularity = movieSelected.querySelector(
 );
 
 const watchProviderRent = $("#watchProvider_Rent");
+
+
+const relatedMovies = $("#relatedMovies");
+const relatedMoviesList = $("#relatedMoviesList");
